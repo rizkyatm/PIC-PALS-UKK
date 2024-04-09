@@ -15,7 +15,7 @@ class FotoController extends Controller
         $albums = Album::where('user_id', $userId)->latest()->get();
 
         $fotoTerbaru = Foto::latest()->first();
-        $fotosTanpaTerbaru = Foto::where('id', '!=', $fotoTerbaru->id)->get();
+        $fotosTanpaTerbaru = Foto::where('id', '!=', optional($fotoTerbaru)->id)->get();
         $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());
 
         return view('user.index', compact('fotos','albums'));

@@ -193,82 +193,84 @@
                 <div class="row">
                     <div class="card-columns">
                         @foreach ($fotos as $foto)
-                            <div class="gambar-utama card card-pin">
-                                <div href="" href="#" data-toggle="modal" data-target="#imageModal_{{ $foto->id }}" onclick="openModal({{ $foto->id }})">
-                                    <img class="card-img" style="border-radius: 15px;" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Card image">
-                                </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center">
-                                    <a href="" class="nav-link text-dark" style="padding-left: 0">
-                                        <img class="rounded-circle mr-2" src="assetsUser/img/av.png" width="30">
-                                        <span class="align-middle">{{ $foto->user->username }}</span>
-                                    </a>
-                                    <div>
-                                        {{-- <a style="padding-right: 5px"><span class="align-middle">{{ $foto->likes_count }} <i class="bi bi-heart"></i></span></a>  --}}
-                                        <a style="padding-right: 5px"><span id="timeElapsed{{ $foto->id }}"></span> <i class="bi bi-clock"></i></a>
+                            @if($foto)
+                                <div class="gambar-utama card card-pin">
+                                    <div href="" href="#" data-toggle="modal" data-target="#imageModal_{{ $foto->id }}" onclick="openModal({{ $foto->id }})">
+                                        <img class="card-img" style="border-radius: 15px;" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Card image">
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center">
+                                        <a href="" class="nav-link text-dark" style="padding-left: 0">
+                                            <img class="rounded-circle mr-2" src="assetsUser/img/av.png" width="30">
+                                            <span class="align-middle">{{ $foto->user->username }}</span>
+                                        </a>
+                                        <div>
+                                            {{-- <a style="padding-right: 5px"><span class="align-middle">{{ $foto->likes_count }} <i class="bi bi-heart"></i></span></a>  --}}
+                                            <a style="padding-right: 5px"><span id="timeElapsed{{ $foto->id }}"></span> <i class="bi bi-clock"></i></a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- MODAL DETAIL GAMBAR -->
-                            <div class="modal bottom fade" style="overflow-y: scroll;" id="imageModal_{{ $foto->id }}" tabindex="-1" role="dialog">
-                                <div class="modal-dialog modal-lg d-flex justify-content-center align-items-center"  id="dialog_modal" role="document">
-                                    <div class="modal-content" style="border-radius: 15px;">
-                                        <div class="container-detail-post">
-                                            {{-- DIV GAMBAR --}}
-                                            <div>
-                                                <img style="border-top-left-radius: 15px; border-bottom-left-radius: 15px;" id="modalImage" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Image">
-                                            </div>
-
-                                            {{-- DIV DETAIL --}}
-                                            <div class="card-body card-body-d">
-                                                <h1 class="card-title display-4">{{ $foto->judul_foto }}</h1>
-                                                <span>{{ $foto->deskripsi_foto }}</span>
-                                                <hr style="border: transparent">
-                                                <div class="d-flex mb-3" style="justify-content: space-between">
-                                                    <div class="d-flex">
-                                                        <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px">
-                                                        <div style="margin-left: 10px">
-                                                            <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
-                                                            <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
-                                                        </div>
-                                                        <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
-                                                    </div>
+                            
+                                <!-- MODAL DETAIL GAMBAR -->
+                                <div class="modal bottom fade" style="overflow-y: scroll;" id="imageModal_{{ $foto->id }}" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-lg d-flex justify-content-center align-items-center"  id="dialog_modal" role="document">
+                                        <div class="modal-content" style="border-radius: 15px;">
+                                            <div class="container-detail-post">
+                                                {{-- DIV GAMBAR --}}
+                                                <div>
+                                                    <img style="border-top-left-radius: 15px; border-bottom-left-radius: 15px;" id="modalImage" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Image">
                                                 </div>
-                                                <button type="button" class="btn btn-gray200"  style="background-color: #6997BF;color: white">
-                                                    <span class="bi bi-download"></span>  Download
-                                                </button>
-                                                <button type="button" class="btn btn-gray200"  style="background-color: #243D6A;color: white">
-                                                    <span class="bi bi-exclamation-triangle"></span>  Report
-                                                </button>
-                                                <button type="button" class="btn btn-like btn-gray200" style="background-color: #445985;color: white" id="likeButton_{{ $foto->id }}" data-photoid="{{ $foto->id }}">
-                                                    <span class="bi bi-suit-heart"></span> 
-                                                    <span id="likeCount_{{ $foto->id }}">{{ $foto->likes_count }} likes</span>
-                                                </button>
-                                        
-                                                <div class="panel panel-info comment-wrapper mt-4">
-                                                    <form action="{{ route('comments.photo') }}" method="POST" class="commentForm">
-                                                        @csrf
-                                                        <div style="display: flex; align-items: flex-end; justify-content: space-between;">
-                                                            <textarea style="margin-right: 5px;" name="isi_komentar" class="form-control" placeholder="write a comment..." rows="1" oninput="autoResize(this)"></textarea>
-                                                            <input type="hidden" name="foto_id" value="{{ $foto->id }}">
-                                                            <button type="submit" style="height: 40px; background-color: #132B40; color: white" class="btn btn-info"><i class="bi bi-send"></i></button>
+
+                                                {{-- DIV DETAIL --}}
+                                                <div class="card-body card-body-d">
+                                                    <h1 class="card-title display-4">{{ $foto->judul_foto }}</h1>
+                                                    <span>{{ $foto->deskripsi_foto }}</span>
+                                                    <hr style="border: transparent">
+                                                    <div class="d-flex mb-3" style="justify-content: space-between">
+                                                        <div class="d-flex">
+                                                            <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px">
+                                                            <div style="margin-left: 10px">
+                                                                <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
+                                                                <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
+                                                            </div>
+                                                            <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
                                                         </div>
-                                                    </form>
-                                                    <h3  class="card-title display-4 mb-1 mt-2" style="font-size:20px">
-                                                        Comments (<span id="commentCount_{{ $foto->id }}">0</span>)
-                                                    </h3>
-                                                    <hr class="mt-1">
-                                                    <div class="panel-body" id="style-2" style="max-height: 265px; overflow-y: auto;">
-                                                        <ul id="commentList_{{ $foto->id }}" class="media-list" style="padding: 0">
-                                                        </ul>
+                                                    </div>
+                                                    <button type="button" class="btn btn-gray200"  style="background-color: #6997BF;color: white">
+                                                        <span class="bi bi-download"></span>  Download
+                                                    </button>
+                                                    <button type="button" class="btn btn-gray200"  style="background-color: #243D6A;color: white">
+                                                        <span class="bi bi-exclamation-triangle"></span>  Report
+                                                    </button>
+                                                    <button type="button" class="btn btn-like btn-gray200" style="background-color: #445985;color: white" id="likeButton_{{ $foto->id }}" data-photoid="{{ $foto->id }}">
+                                                        <span class="bi bi-suit-heart"></span> 
+                                                        <span id="likeCount_{{ $foto->id }}">{{ $foto->likes_count }} likes</span>
+                                                    </button>
+                                            
+                                                    <div class="panel panel-info comment-wrapper mt-4">
+                                                        <form action="{{ route('comments.photo') }}" method="POST" class="commentForm">
+                                                            @csrf
+                                                            <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+                                                                <textarea style="margin-right: 5px;" name="isi_komentar" class="form-control" placeholder="write a comment..." rows="1" oninput="autoResize(this)"></textarea>
+                                                                <input type="hidden" name="foto_id" value="{{ $foto->id }}">
+                                                                <button type="submit" style="height: 40px; background-color: #132B40; color: white" class="btn btn-info"><i class="bi bi-send"></i></button>
+                                                            </div>
+                                                        </form>
+                                                        <h3  class="card-title display-4 mb-1 mt-2" style="font-size:20px">
+                                                            Comments (<span id="commentCount_{{ $foto->id }}">0</span>)
+                                                        </h3>
+                                                        <hr class="mt-1">
+                                                        <div class="panel-body" id="style-2" style="max-height: 265px; overflow-y: auto;">
+                                                            <ul id="commentList_{{ $foto->id }}" class="media-list" style="padding: 0">
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                             <!-- MODAL DETAIL GAMBAR END -->
+                                <!-- MODAL DETAIL GAMBAR END -->
+                             @endif
                         @endforeach
                     </div>
                 </div>
@@ -474,6 +476,71 @@
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
 <script>
+    // GET DATA SAAT BUKA MODAL
+    function openModal(photoId) {
+        loadComments(photoId);
+        loadLikeStatus(photoId);
+    }
+    
+    // GET LIKE BY FOTO_ID
+    function loadLikeStatus(photoId) {
+        $.ajax({
+            url: "{{ route('get-like-status') }}",
+            type: 'GET',
+            data: {
+                foto_id: photoId
+            },
+            dataType: 'json',
+            success: function(response) {
+                // Handle response here
+                console.log(response);
+    
+                $('#likeCount_' + photoId).text(response.like_count + ' likes');
+                // Toggle button text and class based on user's like status
+                if (response.user_liked) {
+                    $('#likeButton_' + photoId).removeClass('btn-like').addClass('btn-unlike');
+                    $('#likeButton_' + photoId).html('<span style="color: #ff0000;" class="bi bi-suit-heart-fill"></span> <span id="likeCount_' + photoId + '">' + response.like_count + ' likes</span>');
+                } else {
+                    $('#likeButton_' + photoId).removeClass('btn-unlike').addClass('btn-like');
+                    $('#likeButton_' + photoId).html('<span class="bi bi-suit-heart"></span> <span id="likeCount_' + photoId + '">' + response.like_count + ' likes</span>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    
+    // GET KOMENTAR BY FOTO_ID
+    function loadComments(photoId) {
+        $.ajax({
+            url: "/get/comment/" + photoId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                var commentList = $('#commentList_' + photoId);
+                commentList.empty(); // Bersihkan daftar komentar sebelum menambahkan yang baru
+    
+                // Tampilkan setiap komentar dalam daftar
+                response.comments.forEach(function(comment) {
+                    var commentItem = $('<li class="media"></li>');
+                    
+                    var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
+                    // var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-1"><span class="text-muted pull-right"><small class="text-muted">' + comment.created_at + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
+                    commentItem.append(commentContent);
+                    commentList.append(commentItem);
+                });
+    
+                // Tampilkan jumlah komentar
+                $('#commentCount_' + photoId).text(response.comments.length);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    
     // FORMAT WAKTU CREATE_AT
     function formatTimeAgo(timestamp) {
         const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
@@ -580,71 +647,6 @@
         toggleLike(photoId);
     });
     
-    // GET DATA SAAT BUKA MODAL
-    function openModal(photoId) {
-        loadComments(photoId);
-        loadLikeStatus(photoId);
-    }
-    
-    // GET LIKE BY FOTO_ID
-    function loadLikeStatus(photoId) {
-        $.ajax({
-            url: "{{ route('get-like-status') }}",
-            type: 'GET',
-            data: {
-                foto_id: photoId
-            },
-            dataType: 'json',
-            success: function(response) {
-                // Handle response here
-                console.log(response);
-    
-                $('#likeCount_' + photoId).text(response.like_count + ' likes');
-                // Toggle button text and class based on user's like status
-                if (response.user_liked) {
-                    $('#likeButton_' + photoId).removeClass('btn-like').addClass('btn-unlike');
-                    $('#likeButton_' + photoId).html('<span style="color: #ff0000;" class="bi bi-suit-heart-fill"></span> <span id="likeCount_' + photoId + '">' + response.like_count + ' likes</span>');
-                } else {
-                    $('#likeButton_' + photoId).removeClass('btn-unlike').addClass('btn-like');
-                    $('#likeButton_' + photoId).html('<span class="bi bi-suit-heart"></span> <span id="likeCount_' + photoId + '">' + response.like_count + ' likes</span>');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    }
-    
-    // GET KOMENTAR BY FOTO_ID
-    function loadComments(photoId) {
-        $.ajax({
-            url: "/get/comment/" + photoId,
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                var commentList = $('#commentList_' + photoId);
-                commentList.empty(); // Bersihkan daftar komentar sebelum menambahkan yang baru
-    
-                // Tampilkan setiap komentar dalam daftar
-                response.comments.forEach(function(comment) {
-                    var commentItem = $('<li class="media"></li>');
-                    
-                    var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
-                    // var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-1"><span class="text-muted pull-right"><small class="text-muted">' + comment.created_at + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
-                    commentItem.append(commentContent);
-                    commentList.append(commentItem);
-                });
-    
-                // Tampilkan jumlah komentar
-                $('#commentCount_' + photoId).text(response.comments.length);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    }
-    
     //HEIGHT TEXT AREA
     function autoResize(textarea) {
         textarea.style.height = 'auto'; // Set ulang tinggi textarea ke nilai default
@@ -665,6 +667,7 @@
     // Fungsi untuk menghitung waktu yang sudah berlalu dan memperbarui tampilan
     function updateElapsedTime() {
         @foreach ($fotos as $foto)
+        @if($foto)
             // Mendapatkan waktu foto dibuat dari server
             var createdAt{{ $foto->id }} = new Date(document.getElementById('createdAt{{ $foto->id }}').innerText);
             
@@ -706,6 +709,7 @@
 
             // Mengupdate tampilan dengan waktu yang sudah berlalu
             document.getElementById('timeElapsed{{ $foto->id }}').innerText = timeElapsed{{ $foto->id }};
+        @endif
         @endforeach
     }
 
