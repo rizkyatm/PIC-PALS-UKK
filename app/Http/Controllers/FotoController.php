@@ -57,4 +57,18 @@ class FotoController extends Controller
         // Redirect atau tampilkan respons sesuai kebutuhan aplikasi Anda
         return response()->json(['message' => 'Foto berhasil ditambahkan!']);
     }
+
+    public function deleteFoto($id)
+    {
+        if(request()->ajax()) {
+            $foto = Foto::findOrFail($id);
+            
+            if ($foto->user->id == auth()->id()) {
+                $foto->delete();
+                return response()->json(['success' => true, 'message' => 'Photo deleted successfully.']);
+            } else {
+                return response()->json(['error' => false, 'message' => 'You do not have permission to delete this photo.']);
+            }
+        }
+    }
 }

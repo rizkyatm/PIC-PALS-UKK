@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Home - Pic Pals</title>
     <script type="text/javascript">
         (function() {
@@ -127,7 +128,9 @@
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Modalpost">Add Post</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"><img class="rounded-circle mr-2" src="assetsUser/img/av.png"  width="30"><span class="align-middle">{{ auth()->user()->username }}</span></a>
+                    <a class="nav-link"><img class="rounded-circle mr-2" src="{{ auth()->user()->foto_profile ? asset('storage/' . auth()->user()->foto_profile) : asset('assetsUser/img/av.png') }}"  width="30"> 
+                        <span class="align-middle">{{ auth()->user()->username }}</span>
+                    </a>
                 </li>
                 @else
                 <li class="nav-item">
@@ -200,7 +203,11 @@
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center">
                                         <a href="" class="nav-link text-dark" style="padding-left: 0">
-                                            <img class="rounded-circle mr-2" src="assetsUser/img/av.png" width="30">
+                                            @if ($foto->user->foto_profile)
+                                                <img class="rounded-circle mr-2" src="{{ asset('storage/'.$foto->user->foto_profile) }}" alt="" width="30">
+                                            @else
+                                                <img class="rounded-circle mr-2" src="{{ asset('assetsUser/img/av.png') }}" alt="" width="30">
+                                            @endif
                                             <span class="align-middle">{{ $foto->user->username }}</span>
                                         </a>
                                         <div>
@@ -227,7 +234,7 @@
                                                     <hr style="border: transparent">
                                                     <div class="d-flex mb-3" style="justify-content: space-between">
                                                         <div class="d-flex">
-                                                            <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px">
+                                                            <img src="{{ $foto->user->foto_profile ? asset('storage/' . $foto->user->foto_profile) : asset('assetsUser/img/av.png') }}" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px">
                                                             <div style="margin-left: 10px">
                                                                 <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
                                                                 <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
@@ -235,17 +242,28 @@
                                                             <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
                                                         </div>
                                                     </div>
-                                                    <button type="button" class="btn btn-gray200"  style="background-color: #6997BF;color: white">
-                                                        <span class="bi bi-download"></span>  Download
-                                                    </button>
-                                                    <button type="button" class="btn btn-gray200"  style="background-color: #243D6A;color: white">
-                                                        <span class="bi bi-exclamation-triangle"></span>  Report
-                                                    </button>
                                                     <button type="button" class="btn btn-like btn-gray200" style="background-color: #445985;color: white" id="likeButton_{{ $foto->id }}" data-photoid="{{ $foto->id }}">
                                                         <span class="bi bi-suit-heart"></span> 
                                                         <span id="likeCount_{{ $foto->id }}">{{ $foto->likes_count }} likes</span>
                                                     </button>
-                                            
+                                                    <a href="{{ asset('storage/' . $foto->lokasi_file) }}" download>
+                                                        <button type="button" class="btn btn-gray200" style="background-color: #6997BF; color: white">
+                                                            <span class="bi bi-download"></span> Download
+                                                        </button>
+                                                    </a>
+                                                    <button type="button" class="btn btn-gray200"  style="background-color: #243D6A;color: white">
+                                                        <span class="bi bi-exclamation-triangle"></span>  Report
+                                                    </button>
+                                                    @if($foto->user->id == auth()->id())
+                                                        <form id="deleteForm_{{ $foto->id }}" action="{{ route('delete.photo', $foto->id) }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                        </form>
+                                                        
+                                                        <button type="button" class="btn btn-gray200" style="background-color: #cd4545; color: white" onclick="event.preventDefault(); deleteFoto({{ $foto->id }});">
+                                                            <span class="bi bi-exclamation-triangle"></span> Delete
+                                                        </button>
+                                                    @endif
+                                                    
                                                     <div class="panel panel-info comment-wrapper mt-4">
                                                         <form action="{{ route('comments.photo') }}" method="POST" class="commentForm">
                                                             @csrf
@@ -420,7 +438,7 @@
                 <div class="card shadow-none rounded-0 w-100 p-2 pt-3 border-0">
                     <div class="card-body rounded-0 text-left p-3">
                         <h2 class="fw-700 display1-size display2-md-size mb-4">Register into <br>your account</h2>
-                        <form action="/registerUser" method="POST">
+                        <form action="/registerUser" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group icon-input mb-3">
                                 <i class="font-sm ti-email text-grey-500 pe-0"></i>
@@ -443,7 +461,7 @@
                                 <i class="font-sm ti-lock text-grey-500 pe-0"></i>
                             </div>
                             <div class="card">                           
-                                <input type="file" name="lokasi_file" class="image-crop-filepond" image-crop-aspect-ratio="1:1">
+                                <input type="file" name="photo_profile" class="image-crop-filepond" image-crop-aspect-ratio="1:1">
                             </div>
                             <div class="col-sm-12 p-0 text-left">
                                 <div class="form-group mb-3">
@@ -476,6 +494,36 @@
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
 <script>
+    // AJAX HAPUS FOTO 
+    function deleteFoto(photoId) {
+        // Dapatkan token CSRF dari formulir
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+        // Kirim permintaan AJAX dengan token CSRF
+        $.ajax({
+            url: "/delete-foto/" + photoId,
+            type: 'DELETE',
+            data: {
+                _token: csrfToken
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.message, 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    // Tampilkan pesan error
+                    toastr.error(response.message, 'Error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
     // GET DATA SAAT BUKA MODAL
     function openModal(photoId) {
         loadComments(photoId);
@@ -525,9 +573,9 @@
                 // Tampilkan setiap komentar dalam daftar
                 response.comments.forEach(function(comment) {
                     var commentItem = $('<li class="media"></li>');
-                    
-                    var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
-                    // var commentContent = '<a href="#" style="margin-right: 10px"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-1"><span class="text-muted pull-right"><small class="text-muted">' + comment.created_at + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
+                    var fotoProfile = comment.user.foto_profile ? 'storage/' + comment.user.foto_profile : 'assetsUser/img/av.png';
+
+                    var commentContent = '<a href="#" style="margin-right: 10px"><img src="' + fotoProfile + '"  alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
                     commentItem.append(commentContent);
                     commentList.append(commentItem);
                 });

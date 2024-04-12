@@ -81,6 +81,13 @@ class loginController extends Controller
             'password' => 'required',
         ]);
 
+        if ($request->hasFile('photo_profile')) {
+            $photo = $request->file('photo_profile')->store('public/profile_photos');
+            $photo_profile = str_replace('public/', '', $photo);
+        } else {
+            $photo_profile = null;
+        }
+
         $user = new User();
         $user->email = $request->email;
         $user->username = $request->username;
@@ -88,6 +95,7 @@ class loginController extends Controller
         $user->alamat = $request->alamat;
         $user->password = Hash::make($request->password);
         $user->role = 'user';
+        $user->foto_profile = $photo_profile;
         $user->save();
 
         // Autentikasi pengguna baru
