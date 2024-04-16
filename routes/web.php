@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
@@ -29,7 +30,14 @@ Route::get('/get/comment/{id}', [KomentarController::class, 'getComment'])->name
 Route::post('/toggle-like', [LikeController::class, 'toggleLike'])->name('toggle-like');
 Route::get('/get-like-status', [LikeController::class, 'getLikeStatus'])->name('get-like-status');
 
+Route::get('/profile/{id}', [FotoController::class, 'profile'])->name('profile.photo');
+
+Route::get('/albums/{id}', [AlbumController::class, 'getAlbum'])->name('index.album');
+Route::post('/store-album', [AlbumController::class, 'create'])->name('store.album');
+Route::get('/foto-album/{id}', [AlbumController::class, 'getFoto'])->name('foto.album');
+
 
 Route::post('/authUser', [loginController::class, 'login'])->name('authUser');
 Route::post('/registerUser', [loginController::class, 'register'])->name('registerUser');
 Route::get('/logout', [loginController::class, 'logout'])->name('logout');
+Route::post('/update-user/{id}', [loginController::class, 'update'])->name('updateUser');

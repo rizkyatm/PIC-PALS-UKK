@@ -107,4 +107,53 @@ class loginController extends Controller
         } 
     }
 
+    public function update(Request $request, $id)
+    {
+        // Pastikan pengguna telah login
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You must log in first'], 401);
+        }
+
+        // Temukan pengguna yang akan diperbarui
+        $user = User::findOrFail($id);
+    
+        // Inisialisasi $photo_profile dengan nilai null
+        $photo_profile = null;
+    
+        // Periksa dan simpan gambar profil jika diunggah
+        if ($request->hasFile('photo_profile')) {
+            $photo = $request->file('photo_profile')->store('public/profile_photos');
+            $photo_profile = str_replace('public/', '', $photo);
+        } 
+        
+        // Perbarui data pengguna
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->nama_lengkap = $request->nama_lengkap;
+        $user->alamat = $request->alamat;
+        
+        // Periksa apakah $photo_profile tidak null sebelum memperbarui foto profil
+        if ($photo_profile !== null) {
+            $user->foto_profile = $photo_profile;
+        }
+    
+        // Periksa dan perbarui password jika dimasukkan
+        if ($request->filled('password_old') && $request->filled('password_new')) {
+            // Periksa apakah password lama cocok
+            if (!\Hash::check($request->password_old, $user->password)) {
+                return response()->json(['error' => 'The password you entered does not match'], 400);
+
+            }
+            // Update password baru
+            $user->password = bcrypt($request->password_new);
+        }
+    
+        // Simpan perubahan
+        $user->save();
+    
+        return response()->json(['message' => 'Profile updated successfullyi'], 200);
+    }
+    
+    
+
 }

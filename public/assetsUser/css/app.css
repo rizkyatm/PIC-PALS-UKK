@@ -2060,10 +2060,10 @@ pre {
   .form-control:focus {
     color: #495057;
     background-color: #fff;
-    border-color: #f74d60;
+    border-color: #101126;
     outline: 0;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 0.2rem #10112633; }
   /* line 40, node_modules/bootstrap/scss/_forms.scss */
   .form-control::-webkit-input-placeholder {
     color: #6c757d;
@@ -2377,8 +2377,8 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   .custom-select:invalid:focus,
   .custom-select.is-invalid:focus {
     border-color: #bd081c;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 0.2rem #10112633; }
   /* line 64, node_modules/bootstrap/scss/mixins/_forms.scss */
   .was-validated .form-control:invalid ~ .invalid-feedback,
   .was-validated .form-control:invalid ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback,
@@ -2411,7 +2411,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   color: #bd081c; }
   /* line 101, node_modules/bootstrap/scss/mixins/_forms.scss */
   .was-validated .custom-control-input:invalid ~ .custom-control-label::before, .custom-control-input.is-invalid ~ .custom-control-label::before {
-    background-color: #f74d60; }
+    background-color: #101126; }
 
 /* line 106, node_modules/bootstrap/scss/mixins/_forms.scss */
 .was-validated .custom-control-input:invalid ~ .invalid-feedback,
@@ -2425,8 +2425,8 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 /* line 118, node_modules/bootstrap/scss/mixins/_forms.scss */
 .was-validated .custom-control-input:invalid:focus ~ .custom-control-label::before, .custom-control-input.is-invalid:focus ~ .custom-control-label::before {
-  -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-          box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+  -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633;
+          box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633; }
 
 /* line 129, node_modules/bootstrap/scss/mixins/_forms.scss */
 .was-validated .custom-file-input:invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
@@ -2443,8 +2443,8 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 /* line 141, node_modules/bootstrap/scss/mixins/_forms.scss */
 .was-validated .custom-file-input:invalid:focus ~ .custom-file-label, .custom-file-input.is-invalid:focus ~ .custom-file-label {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+  -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+          box-shadow: 0 0 0 0.2rem #10112633; }
 
 /* line 264, node_modules/bootstrap/scss/_forms.scss */
 .form-inline {
@@ -2564,8 +2564,8 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
   /* line 23, node_modules/bootstrap/scss/_buttons.scss */
   .btn:focus, .btn.focus {
     outline: 0;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 0.2rem #10112633; }
   /* line 30, node_modules/bootstrap/scss/_buttons.scss */
   .btn.disabled, .btn:disabled {
     opacity: 0.65; }
@@ -4155,8 +4155,8 @@ input[type="button"].btn-block {
     background-color: #bd081c; }
   /* line 33, node_modules/bootstrap/scss/_custom-forms.scss */
   .custom-control-input:focus ~ .custom-control-label::before {
-    -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633; }
   /* line 38, node_modules/bootstrap/scss/_custom-forms.scss */
   .custom-control-input:active ~ .custom-control-label::before {
     color: #fff;
@@ -4262,7 +4262,7 @@ input[type="button"].btn-block {
           appearance: none; }
   /* line 182, node_modules/bootstrap/scss/_custom-forms.scss */
   .custom-select:focus {
-    border-color: #f74d60;
+    border-color: #101126;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(247, 77, 96, 0.5);
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(247, 77, 96, 0.5); }
@@ -4315,12 +4315,12 @@ input[type="button"].btn-block {
   opacity: 0; }
   /* line 251, node_modules/bootstrap/scss/_custom-forms.scss */
   .custom-file-input:focus ~ .custom-file-label {
-    border-color: #f74d60;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    border-color: #101126;
+    -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 0.2rem #10112633; }
     /* line 255, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-file-input:focus ~ .custom-file-label::after {
-      border-color: #f74d60; }
+      border-color: #101126; }
   /* line 261, node_modules/bootstrap/scss/_custom-forms.scss */
   .custom-file-input:lang(en) ~ .custom-file-label::after {
     content: "Browse"; }
@@ -4383,8 +4383,8 @@ input[type="button"].btn-block {
     /* line 330, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-webkit-slider-thumb:focus {
       outline: none;
-      -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-              box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+      -webkit-box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633;
+              box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633; }
     /* line 335, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-webkit-slider-thumb:active {
       background-color: #fa7e8c; }
@@ -4409,7 +4409,7 @@ input[type="button"].btn-block {
     /* line 360, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-moz-range-thumb:focus {
       outline: none;
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633; }
     /* line 365, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-moz-range-thumb:active {
       background-color: #fa7e8c; }
@@ -4433,7 +4433,7 @@ input[type="button"].btn-block {
     /* line 390, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-ms-thumb:focus {
       outline: none;
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #10112633; }
     /* line 395, node_modules/bootstrap/scss/_custom-forms.scss */
     .custom-range::-ms-thumb:active {
       background-color: #fa7e8c; }
@@ -5323,8 +5323,8 @@ input[type="button"].btn-block {
   .page-link:focus {
     z-index: 2;
     outline: 0;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25);
-            box-shadow: 0 0 0 0.2rem rgba(189, 8, 28, 0.25); }
+    -webkit-box-shadow: 0 0 0 0.2rem #10112633;
+            box-shadow: 0 0 0 0.2rem #10112633; }
   /* line 32, node_modules/bootstrap/scss/_pagination.scss */
   .page-link:not(:disabled):not(.disabled) {
     cursor: pointer; }

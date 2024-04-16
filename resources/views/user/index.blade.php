@@ -128,7 +128,8 @@
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#Modalpost">Add Post</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"><img class="rounded-circle mr-2" src="{{ auth()->user()->foto_profile ? asset('storage/' . auth()->user()->foto_profile) : asset('assetsUser/img/av.png') }}"  width="30"> 
+                    <a href="/profile/{{ auth()->user()->id }}" class="nav-link">
+                        <img class="rounded-circle mr-2" src="{{ auth()->user()->foto_profile ? asset('storage/' . auth()->user()->foto_profile) : asset('assetsUser/img/av.png') }}"  width="30" height="30" style="object-fit: cover;"> 
                         <span class="align-middle">{{ auth()->user()->username }}</span>
                     </a>
                 </li>
@@ -152,69 +153,68 @@
 
     <main role="main">
         <section class="mt-4 mb-5">
-            {{-- <div class="container mb-4" style="display: flex; align-content:space-between; margin-left: 0">
-                <h1 class="font-weight-bold title">Pic Pals</h1>
-                <div class="row">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <button class="navbar-light navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarsExplore" aria-controls="navbarsDefault" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarsExplore">
-                            <ul class="navbar-nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Lifestyle</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Food</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Travel</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                    <div class="dropdown-menu shadow-lg" aria-labelledby="dropdown01">
-                                        <a class="dropdown-item" href="#">Astronomy</a>
-                                        <a class="dropdown-item" href="#">Nature</a>
-                                        <a class="dropdown-item" href="#">Cooking</a>
-                                        <a class="dropdown-item" href="#">Fashion</a>
-                                        <a class="dropdown-item" href="#">Wellness</a>
-                                        <a class="dropdown-item" href="#">Dieting</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div> --}}
             <div class="container-fluid">
                 <div class="row">
                     <div class="card-columns">
                         @foreach ($fotos as $foto)
                             @if($foto)
                                 <div class="gambar-utama card card-pin">
-                                    <div href="" href="#" data-toggle="modal" data-target="#imageModal_{{ $foto->id }}" onclick="openModal({{ $foto->id }})">
-                                        <img class="card-img" style="border-radius: 15px;" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Card image">
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center">
-                                        <a href="" class="nav-link text-dark" style="padding-left: 0">
-                                            @if ($foto->user->foto_profile)
-                                                <img class="rounded-circle mr-2" src="{{ asset('storage/'.$foto->user->foto_profile) }}" alt="" width="30">
-                                            @else
-                                                <img class="rounded-circle mr-2" src="{{ asset('assetsUser/img/av.png') }}" alt="" width="30">
-                                            @endif
-                                            <span class="align-middle">{{ $foto->user->username }}</span>
-                                        </a>
-                                        <div>
-                                            {{-- <a style="padding-right: 5px"><span class="align-middle">{{ $foto->likes_count }} <i class="bi bi-heart"></i></span></a>  --}}
-                                            <a style="padding-right: 5px"><span id="timeElapsed{{ $foto->id }}"></span> <i class="bi bi-clock"></i></a>
+                                    {{-- <div href="" data-toggle="modal" data-target="#imageModal_{{ $foto->id }}" onclick="openModal({{ $foto->id }})"> --}}
+                                        <div href="" data-toggle="modal" onclick="openModalAndProfile(event, {{$foto->id}}, {{$foto->user->id}})">
+                                            <img class="card-img" style="border-radius: 15px;" src="{{ asset('storage/' . $foto->lokasi_file) }}" alt="Card image">
+                                            <div class="overlay" style="border-radius: 15px;">
+                                                <div class="more" style="display: flex; justify-content: space-between; align-items:center">
+                                                    <a href="/profile/{{$foto->user->id}}" class="nav-link text-dark" style="padding-left: 5px">
+                                                        @if ($foto->user->foto_profile)
+                                                            <img class="rounded-circle mr-2 " src="{{ asset('storage/'.$foto->user->foto_profile) }}" alt="" width="30" height="30" style="object-fit: cover;">
+                                                        @else
+                                                            <img class="rounded-circle mr-2" src="{{ asset('assetsUser/img/av.png') }}" alt="" width="30">
+                                                        @endif
+                                                        <span style="color: white" class="align-middle ">{{ $foto->user->username }}</span>
+                                                    </a>
+                                                    <div>
+                                                        <a style="padding-right: 5px"><span style="color: white; font-size: 12px" id="timeElapsed{{ $foto->id }}"></span></a>
+                                                        <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
+                                                        <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
+                                                    </div>
+                                                </div>
+                                                {{-- <h2 class="card-title title">Some Title</h2>
+                                                <div style="display: flex; justify-content: space-between; align-items: center;" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                                                    <a href="/profile/{{$foto->user->id}}" class="nav-link text-dark" style="padding-left: 5px">
+                                                        @if ($foto->user->foto_profile)
+                                                            <img class="rounded-circle mr-2 " src="{{ asset('storage/'.$foto->user->foto_profile) }}" alt="" width="30">
+                                                        @else
+                                                            <img class="rounded-circle mr-2" src="{{ asset('assetsUser/img/av.png') }}" alt="" width="30">
+                                                        @endif
+                                                        <span style="color: white" class="align-middle">{{ $foto->user->username }}</span>
+                                                    </a>
+                                                    <div>
+                                                        <a style="padding-right: 5px"><span style="color: white" id="timeElapsed{{ $foto->id }}"></span></a>
+                                                        <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
+                                                    </div>
+                                                </div> --}}
+                                            </div>
+                                            
                                         </div>
-                                    </div>
+                                        
+                                        <script>
+                                            function openModalAndProfile(event, fotoId, userId) {
+                                                // Mencegah perilaku default dari elemen <a>
+                                                event.preventDefault();
+                                                
+                                                // Mengecek apakah bagian dari elemen yang diklik adalah bagian yang menunjukkan profil pengguna
+                                                var isProfileLinkClicked = event.target.closest('.nav-link') !== null;
+                                                
+                                                // Jika yang diklik adalah bagian profil pengguna, arahkan ke profil pengguna
+                                                if (isProfileLinkClicked) {
+                                                    window.location.href = '/profile/' + userId;
+                                                } else {
+                                                    openModal(fotoId);
+                                                    // Jika yang diklik bukan bagian profil pengguna, buka modal
+                                                    // $('#imageModal_' + fotoId).modal('show');
+                                                }
+                                            }
+                                        </script>
                                 </div>
                             
                                 <!-- MODAL DETAIL GAMBAR -->
@@ -234,13 +234,17 @@
                                                     <hr style="border: transparent">
                                                     <div class="d-flex mb-3" style="justify-content: space-between">
                                                         <div class="d-flex">
-                                                            <img src="{{ $foto->user->foto_profile ? asset('storage/' . $foto->user->foto_profile) : asset('assetsUser/img/av.png') }}" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px">
-                                                            <div style="margin-left: 10px">
-                                                                <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
-                                                                <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
-                                                            </div>
-                                                            <span id="createdAt{{ $foto->id }}" style="display: none;">{{ $foto->created_at }}</span>
+                                                            <a href="/profile/{{$foto->user->id}}" class="text-dark" style="display: flex; align-items: center; text-decoration: none">
+                                                                <img src="{{ $foto->user->foto_profile ? asset('storage/' . $foto->user->foto_profile) : asset('assetsUser/img/av.png') }}" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px; object-fit: cover;">
+                                                                <div style="margin-left: 10px">
+                                                                    <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
+                                                                    <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
+                                                                </div>
+                                                            </a>
                                                         </div>
+                                                        <button type="button" class="btn btn-gray200 text-dark">
+                                                            <span class="bi bi-journal-album"></span>  {{$foto->album_id ? $foto->album->nama_album : 'Doesnt have an album'}}
+                                                        </button>
                                                     </div>
                                                     <button type="button" class="btn btn-like btn-gray200" style="background-color: #445985;color: white" id="likeButton_{{ $foto->id }}" data-photoid="{{ $foto->id }}">
                                                         <span class="bi bi-suit-heart"></span> 
@@ -494,6 +498,18 @@
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
 
 <script>
+    // TOMBOL UNTUK MENJALANKAN AJAX LIKE
+    $(document).on('click', '.btn-like', function() {
+        var photoId = $(this).data('photoid');
+        toggleLike(photoId);
+    });
+    
+    // TOMBOL UNTUK MENJALANKAN AJAX LIKE
+    $(document).on('click', '.btn-unlike', function() {
+        var photoId = $(this).data('photoid');
+        toggleLike(photoId);
+    });
+
     // AJAX HAPUS FOTO 
     function deleteFoto(photoId) {
         // Dapatkan token CSRF dari formulir
@@ -566,6 +582,8 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
+                $('#imageModal').attr('data-target', '#imageModal_' + photoId);
+                $('#imageModal_' + photoId).modal('show'); // Menampilkan modal
                 console.log(response);
                 var commentList = $('#commentList_' + photoId);
                 commentList.empty(); // Bersihkan daftar komentar sebelum menambahkan yang baru
@@ -575,7 +593,7 @@
                     var commentItem = $('<li class="media"></li>');
                     var fotoProfile = comment.user.foto_profile ? 'storage/' + comment.user.foto_profile : 'assetsUser/img/av.png';
 
-                    var commentContent = '<a href="#" style="margin-right: 10px"><img src="' + fotoProfile + '"  alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href=""><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
+                    var commentContent = '<a href="/profile/' + comment.user.id + '" style="margin-right: 10px"><img src="' + fotoProfile + '"  alt="" class="img-circle" style="border-radius: 50px; width: 50px; height: 50px;object-fit: cover;"></a><div class="media-body mr-2"><span class="text-muted pull-right"><small class="text-muted">' + formatTimeAgo(comment.created_at) + '</small></span><a href="/profile/' + comment.user.id + '"><strong class="text-dark">' + comment.user.username + '</strong></a><p>' + comment.isi_komentar + '</p></div>';
                     commentItem.append(commentContent);
                     commentList.append(commentItem);
                 });
@@ -682,18 +700,6 @@
             }
         });
     }
-    
-    // TOMBOL UNTUK MENJALANKAN AJAX LIKE
-    $(document).on('click', '.btn-like', function() {
-        var photoId = $(this).data('photoid');
-        toggleLike(photoId);
-    });
-    
-    // TOMBOL UNTUK MENJALANKAN AJAX LIKE
-    $(document).on('click', '.btn-unlike', function() {
-        var photoId = $(this).data('photoid');
-        toggleLike(photoId);
-    });
     
     //HEIGHT TEXT AREA
     function autoResize(textarea) {

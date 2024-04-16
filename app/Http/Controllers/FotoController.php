@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Foto;
+use App\Models\Like;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,9 +16,9 @@ class FotoController extends Controller
         $userId = auth()->id(); 
         $albums = Album::where('user_id', $userId)->latest()->get();
 
-        $fotoTerbaru = Foto::latest()->first();
-        $fotosTanpaTerbaru = Foto::where('id', '!=', optional($fotoTerbaru)->id)->get();
-        $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());
+        $fotoTerbaru = Foto::with('album')->latest()->first();
+        $fotosTanpaTerbaru = Foto::with('album')->where('id', '!=', optional($fotoTerbaru)->id)->get();
+        $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());        
 
         return view('user.index', compact('fotos','albums'));
     }
@@ -70,5 +72,27 @@ class FotoController extends Controller
                 return response()->json(['error' => false, 'message' => 'You do not have permission to delete this photo.']);
             }
         }
+    }
+
+    public function profile($id)
+    {
+        $user = User::find($id);
+        
+        $fotos = Foto::where('user_id', $id)->latest()->get();
+
+        $userId = auth()->id(); 
+        $albums = Album::where('user_id', $userId)->latest()->get();
+
+        // Menghitung total postingan pengguna
+        $totalPost = $fotos->count();
+
+        // Menghitung total like pengguna
+        $totalLike = Like::whereIn('foto_id', $fotos->pluck('id'))->count();
+
+        // Menghitung jumlah album pengguna
+        $albums = Album::where('user_id', $id)->latest()->get();
+        $totalAlbum = $albums->count();
+
+        return view('user.profile', compact('fotos','albums','totalPost', 'totalLike', 'totalAlbum','user'));
     }
 }
