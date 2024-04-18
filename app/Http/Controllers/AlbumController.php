@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Category;
 use App\Models\Foto;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class AlbumController extends Controller
     {   
         $user = User::find($id);
         $albums = Album::where('user_id', $id)->latest()->get();
-        return view('user.album', compact('albums', 'user'));
+        $categorys = Category::all();
+        return view('user.album', compact('albums', 'user', 'categorys'));
     }
 
     public function create(Request $request)
@@ -37,6 +39,7 @@ class AlbumController extends Controller
         $user = User::find($userId); // Mengambil pengguna berdasarkan ID pengguna
         $albums = Album::where('user_id', $id)->latest()->get();
         $fotos = Foto::where('album_id', $id)->latest()->get();
-        return view('user.fotoAlbum', compact('fotos','album','user','albums'));
+        $categorys = Category::all();
+        return view('user.fotoAlbum', compact('fotos','album','user','albums','categorys'));
     }
 }

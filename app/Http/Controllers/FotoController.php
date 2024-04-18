@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
+use App\Models\Category;
 use App\Models\Foto;
 use App\Models\Like;
 use App\Models\User;
@@ -15,13 +16,14 @@ class FotoController extends Controller
     {
         $userId = auth()->id(); 
         $user = User::find($userId);
+        $categorys = Category::all();
         $albums = Album::where('user_id', $userId)->latest()->get();
 
         $fotoTerbaru = Foto::with('album')->latest()->first();
         $fotosTanpaTerbaru = Foto::with('album')->where('id', '!=', optional($fotoTerbaru)->id)->get();
         $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());        
 
-        return view('user.index', compact('fotos','albums','user'));
+        return view('user.index', compact('fotos','albums','user','categorys'));
     }
 
     public function storeFoto(Request $request)
@@ -41,6 +43,7 @@ class FotoController extends Controller
         $photo->judul_foto = $validatedData['judul_foto'];
         $photo->deskripsi_foto = $validatedData['deskripsi_foto'];
         $photo->lokasi_file = str_replace('public/', '', $lokasi_file);
+        $photo->kategori_id = $request->kategori;
         $photo->user_id = Auth::id();
     
         // Jika album baru dipilih, simpan informasi album baru
@@ -94,6 +97,8 @@ class FotoController extends Controller
         $albums = Album::where('user_id', $id)->latest()->get();
         $totalAlbum = $albums->count();
 
-        return view('user.profile', compact('fotos','albums','totalPost', 'totalLike', 'totalAlbum','user'));
+        $categorys = Category::all();
+
+        return view('user.profile', compact('fotos','albums','totalPost', 'totalLike', 'totalAlbum','user', 'categorys'));
     }
 }

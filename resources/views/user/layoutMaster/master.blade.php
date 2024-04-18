@@ -260,6 +260,14 @@
                                     <div class="form-group icon-input mb-3">
                                         <textarea name="deskripsi_foto" id="style-2" class="ps-5 form-control text-grey-900 font-xsss fw-600" style="border: 2px solid #b3b3b3; border-radius: 8px" placeholder="Description" rows="1" oninput="autoResize(this)"></textarea>
                                     </div>
+                                    <div class="form-group icon-input mb-3">
+                                        <select name="kategori" class="ps-5 form-control text-grey-900 font-xsss fw-600" style="border: 2px solid #b3b3b3; border-radius: 8px;">
+                                            <option value="" selected>Select Category</option>
+                                            @foreach ($categorys as $category) 
+                                                <option value="{{$category->id}}">{{$category->judul_kategori}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="card">                           
                                         <input type="file" name="lokasi_file" class="image-preview-filepond">
                                     </div>
@@ -273,8 +281,8 @@
                                     </div>
                                     <div id="albumSection" class="form-group icon-input mb-3" style="display: none;">
                                         <select name="album" class="style-2-input ps-5 form-control text-grey-900 font-xsss fw-600" style="border: 2px solid #b3b3b3; border-radius: 8px">
-                                            @if($albums && $albums->count() > 0)
                                             <option disabled selected>Select your album</option>
+                                            @if($albums && $albums->count() > 0)
                                             @foreach ($albums as $albumItem) 
                                                     <option value="{{$albumItem->id}}">{{$albumItem->nama_album}}</option>
                                                 @endforeach

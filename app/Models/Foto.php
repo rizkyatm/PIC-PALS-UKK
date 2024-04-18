@@ -32,4 +32,8 @@ class Foto extends Model
         return $this->belongsToMany(User::class, 'likes', 'foto_id', 'user_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
