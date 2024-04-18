@@ -25,15 +25,18 @@ class AlbumController extends Controller
         // Set user_id sesuai dengan user yang sedang login
         $album->user_id = auth()->user()->id;
         $album->save();
-
-        // Redirect ke halaman lain atau lakukan tindakan lainnya
-        return back()->with('success', 'Album berhasil ditambahkan.');
+    
+        // Kirim respons JSON
+        return response()->json(['message' => 'Album berhasil ditambahkan.', 'album_id' => $album->id]);
     }
 
     public function getFoto($id)
     {   
         $album = Album::find($id);
+        $userId = $album->user_id; // Mendapatkan ID pengguna yang memiliki album ini
+        $user = User::find($userId); // Mengambil pengguna berdasarkan ID pengguna
+        $albums = Album::where('user_id', $id)->latest()->get();
         $fotos = Foto::where('album_id', $id)->latest()->get();
-        return view('user.fotoAlbum', compact('fotos','album'));
+        return view('user.fotoAlbum', compact('fotos','album','user','albums'));
     }
 }

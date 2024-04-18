@@ -14,13 +14,14 @@ class FotoController extends Controller
     public function index()
     {
         $userId = auth()->id(); 
+        $user = User::find($userId);
         $albums = Album::where('user_id', $userId)->latest()->get();
 
         $fotoTerbaru = Foto::with('album')->latest()->first();
         $fotosTanpaTerbaru = Foto::with('album')->where('id', '!=', optional($fotoTerbaru)->id)->get();
         $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());        
 
-        return view('user.index', compact('fotos','albums'));
+        return view('user.index', compact('fotos','albums','user'));
     }
 
     public function storeFoto(Request $request)

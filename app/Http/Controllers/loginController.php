@@ -151,7 +151,7 @@ class loginController extends Controller
         // Simpan perubahan
         $user->save();
     
-        return response()->json(['message' => 'Profile updated successfullyi'], 200);
+        return response()->json(['message' => 'Profile updated successfully'], 200);
     }
     
     

@@ -81,6 +81,103 @@ body {
 [tabindex="-1"]:focus {
   outline: 0 !important; }
 
+/* tambahan */
+.tombol-1{
+    width: 24.40%;
+ }
+ .tombol2{
+    width: 49.5%;
+    margin-bottom: 8px
+ }
+ @media (max-width: 1495px) {
+     .tombol-1{
+         width: 49.5%;
+         margin-bottom: 8px
+     }
+ }
+ @media (max-width: 1192px) {
+     .tombol2{
+        width: 100%;
+     }
+     .tombol-1{
+        width: 100%;
+     }
+ }
+ .input-1 {
+   box-sizing: border-box;
+   width: 100%;
+   height: calc(3em + 2px);
+   margin: 0 0 1em;
+   padding: 1em;
+   border: 2px solid #b3b3b3;
+   border-radius: 10px;
+   background: #fff;
+   resize: none;
+   outline: none;
+   
+   &:focus {
+     border-color: #132B40;
+     + label {
+       &[placeholder] {
+         &:before {
+           color: #132B40;
+         }
+       }
+     }
+   }
+   
+   &:focus, &:valid {
+     + label {
+         &[placeholder] {
+             &:before {
+           transition-duration: .2s;
+           padding: 0 2px;
+           transform: translate(0, -1.5em) scale(.9, .9);
+           
+         }
+       }
+     }
+   }
+   
+   &:invalid {
+     + label {
+       &[placeholder] {
+           &[alt] {
+           &:before {
+             content: attr(alt);
+
+           }
+         }
+       }
+     }
+   }
+   
+   + label {
+     &[placeholder] {
+       display: block;
+       pointer-events: none;
+       line-height: 1.25em;
+       margin-top: calc(-3em - 2px);
+       margin-bottom: calc((3em - 1em) + 2px);
+       
+       &:before {
+         content: attr(placeholder);
+         display: inline-block;
+         margin: 0 1em;
+         padding: 0 30px;
+         color: #898989;
+         white-space: nowrap;
+         transition: .3s ease-in-out;
+         background-image: linear-gradient(to bottom, #fff, #fff);
+         background-size: 100% 5px;
+         background-repeat: no-repeat;
+         background-position: center;
+       }
+     }
+   }
+ }
+ /* tambahan */
+
 /* line 83, node_modules/bootstrap/scss/_reboot.scss */
 hr {
   -webkit-box-sizing: content-box;
