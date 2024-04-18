@@ -24,6 +24,7 @@ Route::get('/Dashboard', function () {  return view('admin.dashboard');});
 
 Route::get('/pic-pals', [FotoController::class, 'index'])->name('index.photo');
 Route::post('/store-photo', [FotoController::class, 'storeFoto'])->name('store.photo');
+Route::post('/update/photo/{id}', [FotoController::class, 'updateFoto'])->name('update.photo');
 Route::delete('/delete-foto/{id}', [FotoController::class, 'deleteFoto'])->name('delete.photo');
 Route::post('/store/comment', [KomentarController::class, 'store'])->name('comments.photo');
 Route::get('/get/comment/{id}', [KomentarController::class, 'getComment'])->name('get.comments.photo');

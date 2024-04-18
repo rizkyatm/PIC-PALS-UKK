@@ -19,8 +19,8 @@ class FotoController extends Controller
         $categorys = Category::all();
         $albums = Album::where('user_id', $userId)->latest()->get();
 
-        $fotoTerbaru = Foto::with('album')->latest()->first();
-        $fotosTanpaTerbaru = Foto::with('album')->where('id', '!=', optional($fotoTerbaru)->id)->get();
+        $fotoTerbaru = Foto::with('album','category')->latest()->first();
+        $fotosTanpaTerbaru = Foto::with('album','category')->where('id', '!=', optional($fotoTerbaru)->id)->get();
         $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());        
 
         return view('user.index', compact('fotos','albums','user','categorys'));
@@ -100,5 +100,37 @@ class FotoController extends Controller
         $categorys = Category::all();
 
         return view('user.profile', compact('fotos','albums','totalPost', 'totalLike', 'totalAlbum','user', 'categorys'));
+    }
+
+    public function updateFoto(Request $request, $id)
+    {
+        // Validasi data yang dikirimkan
+        $validatedData = $request->validate([
+            'judul_foto' => 'required',
+            'deskripsi_foto' => 'required',
+            'kategori' => 'required|exists:categories,id', // Pastikan kategori yang dipilih ada dalam database
+            'album' => 'nullable|exists:albums,id', // Opsional: pastikan album yang dipilih ada dalam database jika ada
+        ]);
+
+        // Temukan foto yang akan diedit
+        $photo = Foto::findOrFail($id);
+
+        // Update informasi foto
+        $photo->judul_foto = $validatedData['judul_foto'];
+        $photo->deskripsi_foto = $validatedData['deskripsi_foto'];
+        $photo->kategori_id = $validatedData['kategori'];
+
+        // Jika album baru dipilih atau tidak dipilih, update album_id
+        if ($request->filled('album')) {
+            $photo->album_id = $validatedData['album'];
+        } else {
+            $photo->album_id = null; // Kosongkan album_id jika album tidak dipilih
+        }
+
+        // Simpan perubahan
+        $photo->save();
+
+        // Kirim respons JSON untuk Ajax
+        return response()->json(['message' => 'Foto berhasil diperbarui!']);
     }
 }
