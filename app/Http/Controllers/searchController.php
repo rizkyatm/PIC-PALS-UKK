@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AktivitasUser;
 use App\Models\Album;
 use App\Models\Category;
 use App\Models\Foto;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class searchController extends Controller
 {
@@ -42,6 +44,22 @@ class searchController extends Controller
         $user = User::find($userId);
         $categorys = Category::cursor();
         $albums = Album::where('user_id', $userId)->latest()->get();
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // Buat pesan aktivitas jika pengguna telah login
+        if (Auth::check()) {
+            // Buat pesan aktivitas
+            $aktivitas = 'Melakukan pencarian dengan kata kunci "' . $keyword . '"';
+
+            // Simpan aktivitas ke tabel aktivitas_user
+            AktivitasUser::create([
+                'user_id' => $userId,
+                'aktivitas' => $aktivitas,
+                // Anda mungkin ingin menyertakan informasi tambahan seperti jenis pencarian yang dilakukan
+            ]);
+        }
+        ////////////////////////////////////////////////////////////////////////
 
         // Kirim data hasil pencarian ke view
         return view('user.search_results', compact('fotos', 'user', 'categorys','albums','keyword','searchType'));

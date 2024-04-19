@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AktivitasUser;
 use App\Models\User;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
@@ -27,6 +28,20 @@ class loginController extends Controller
                 // Autentikasi berhasil
                 $request->session()->regenerate();
 
+                /////////////////////////////////////////////
+                // Ambil ID pengguna yang berhasil login
+                $userId = Auth::id();
+
+                // Buat pesan aktivitas
+                $aktivitas = 'Melakukan Log-in';
+
+                // Simpan aktivitas ke tabel aktivitas_user
+                AktivitasUser::create([
+                    'user_id' => $userId,
+                    'aktivitas' => $aktivitas,
+                ]);
+                //////////////////////////////////////////////
+
                 // Redirect ke halaman sesuai dengan role pengguna
                 if (Auth::user()->role === 'admin') {
                     // return redirect()->intended('/Dashboard')->with('success', 'Login berhasil!');
@@ -47,7 +62,21 @@ class loginController extends Controller
 
 
     public function logout(Request $request)
-    {
+    {   
+        //////////////////////////////////////////////////////
+        // Ambil ID pengguna yang sedang logout
+        $userId = Auth::id();
+
+        // Buat pesan aktivitas
+        $aktivitas = 'Melakukan Log-out';
+
+        // Simpan aktivitas ke tabel aktivitas_user
+        AktivitasUser::create([
+            'user_id' => $userId,
+            'aktivitas' => $aktivitas,
+        ]);
+        //////////////////////////////////////////////////////
+
         $redirectPath = '/';
 
         // Periksa peran pengguna saat ini
@@ -150,6 +179,17 @@ class loginController extends Controller
     
         // Simpan perubahan
         $user->save();
+
+        /////////////////////////////////////////////////////////////////////////////////////////
+        // Buat pesan aktivitas
+        $aktivitas = 'Mengupdate profil';
+
+        // Simpan aktivitas ke tabel aktivitas_user
+        AktivitasUser::create([
+            'user_id' => $user->id,
+            'aktivitas' => $aktivitas,
+        ]);
+        /////////////////////////////////////////////////////////////////////////////////////////
     
         return response()->json(['message' => 'Profile updated successfully'], 200);
     }

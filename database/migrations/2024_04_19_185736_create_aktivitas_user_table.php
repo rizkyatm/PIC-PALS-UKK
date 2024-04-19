@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('aktivitas');
             $table->string('foto')->nullable();
             $table->timestamps();
-
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AktivitasUser;
 use App\Models\Album;
 use App\Models\Category;
 use App\Models\Foto;
@@ -59,6 +60,15 @@ class FotoController extends Controller
         }
     
         $photo->save();
+
+        $aktivitas = "Menambahkan foto baru dengan judul " . $validatedData['judul_foto'];
+
+        // Simpan aktivitas ke tabel aktivitas_user
+        AktivitasUser::create([
+            'user_id' => Auth::id(),
+            'aktivitas' => $aktivitas,
+            'foto' => str_replace('public/', '', $lokasi_file)
+        ]);
     
         // Redirect atau tampilkan respons sesuai kebutuhan aplikasi Anda
         return response()->json(['message' => 'Foto berhasil ditambahkan!']);
@@ -70,6 +80,15 @@ class FotoController extends Controller
             $foto = Foto::findOrFail($id);
             
             if ($foto->user->id == auth()->id()) {
+                $aktivitas = "Menghapus foto dengan judul " . $foto['judul_foto'];
+
+                // Simpan aktivitas ke tabel aktivitas_user
+                AktivitasUser::create([
+                    'user_id' => Auth::id(),
+                    'aktivitas' => $aktivitas,
+                    'foto' => $foto['lokasi_file']
+                ]);
+                
                 $foto->delete();
                 return response()->json(['success' => true, 'message' => 'Photo deleted successfully.']);
             } else {
@@ -82,13 +101,13 @@ class FotoController extends Controller
     {
         $user = User::find($id);
         
+        // Menghitung total postingan pengguna
         $fotos = Foto::where('user_id', $id)->latest()->get();
+        $totalPost = $fotos->count();
 
         $userId = auth()->id(); 
         $albums = Album::where('user_id', $userId)->latest()->get();
 
-        // Menghitung total postingan pengguna
-        $totalPost = $fotos->count();
 
         // Menghitung total like pengguna
         $totalLike = Like::whereIn('foto_id', $fotos->pluck('id'))->count();
@@ -129,6 +148,19 @@ class FotoController extends Controller
 
         // Simpan perubahan
         $photo->save();
+
+        // Simpan informasi foto sebelum diperbarui
+        $fotoSebelumnya = $photo->toArray();
+        // Buat aktivitas pengguna
+        $aktivitas = "Mengupdate foto dengan judul " . $fotoSebelumnya['judul_foto'];
+
+        // Simpan aktivitas ke tabel aktivitas_user
+        AktivitasUser::create([
+            'user_id' => auth()->id(),
+            'aktivitas' => $aktivitas,
+            'foto' => $fotoSebelumnya['lokasi_file']
+        ]);
+        
 
         // Kirim respons JSON untuk Ajax
         return response()->json(['message' => 'Foto berhasil diperbarui!']);

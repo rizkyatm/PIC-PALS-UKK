@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\exportController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
@@ -46,3 +47,8 @@ Route::post('/authUser', [loginController::class, 'login'])->name('authUser');
 Route::post('/registerUser', [loginController::class, 'register'])->name('registerUser');
 Route::get('/logout', [loginController::class, 'logout'])->name('logout');
 Route::post('/update-user/{id}', [loginController::class, 'update'])->name('updateUser');
+
+
+Route::get('/export-aktivitas', [exportController::class, 'exportExcel'])->name('export.aktivitas');
+Route::get('/export-pdf', [exportController::class, 'exportPdf'])->name('export.pdf');
+
