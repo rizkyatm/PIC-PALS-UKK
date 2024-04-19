@@ -16,7 +16,7 @@ class Foto extends Model
     {
         return $this->belongsTo(Category::class, 'kategori_id');
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -34,6 +34,6 @@ class Foto extends Model
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'likes', 'foto_id', 'user_id');
+        return $this->belongsToMany(Like::class, 'likes', 'foto_id', 'user_id');
     }
 }

@@ -16,7 +16,7 @@ class FotoController extends Controller
     {
         $userId = auth()->id(); 
         $user = User::find($userId);
-        $categorys = Category::all();
+        $categorys = Category::cursor();
         $albums = Album::where('user_id', $userId)->latest()->get();
 
         $fotoTerbaru = Foto::with('album','category')->latest()->first();

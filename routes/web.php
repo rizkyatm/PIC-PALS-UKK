@@ -5,6 +5,7 @@ use App\Http\Controllers\FotoController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\searchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,7 @@ Route::get('/login-admin', function () {  return view('admin.loginTemplate');})-
 Route::get('/Dashboard', function () {  return view('admin.dashboard');});
 
 Route::get('/pic-pals', [FotoController::class, 'index'])->name('index.photo');
+
 Route::post('/store-photo', [FotoController::class, 'storeFoto'])->name('store.photo');
 Route::post('/update/photo/{id}', [FotoController::class, 'updateFoto'])->name('update.photo');
 Route::delete('/delete-foto/{id}', [FotoController::class, 'deleteFoto'])->name('delete.photo');
@@ -30,6 +32,8 @@ Route::post('/store/comment', [KomentarController::class, 'store'])->name('comme
 Route::get('/get/comment/{id}', [KomentarController::class, 'getComment'])->name('get.comments.photo');
 Route::post('/toggle-like', [LikeController::class, 'toggleLike'])->name('toggle-like');
 Route::get('/get-like-status', [LikeController::class, 'getLikeStatus'])->name('get-like-status');
+
+Route::get('/search-foto', [searchController::class, 'search'])->name('search');
 
 Route::get('/profile/{id}', [FotoController::class, 'profile'])->name('profile.photo');
 
