@@ -314,7 +314,7 @@
                                 </label>
                             </div>
                         </div>
-                        <input type="search" name="keyword" value="{{ $keyword ?? '' }}" placeholder="Search" class="search-input">
+                        <input autocomplete="off" type="search" name="keyword" value="{{ $keyword ?? '' }}" placeholder="Search" class="search-input">
                         <button type="submit" class="search-button">
                             <svg class="submit-button">
                                 <use xlink:href="#search"></use>
@@ -340,11 +340,11 @@
                 </ul>
                 <ul class="navbar-nav ml-auto align-items-center">
                     <li class="nav-item" style="font-family: 'fredoka', sans-serif; font-size: 18px">
-                        <a class="nav-link active" style="padding-left:0px" href="/pic-pals">Home</a>
+                        <a class="nav-link active" style="padding-left:0px;" href="/pic-pals">Home</a>
                     </li>
                     @if (auth()->check())
                     <li class="nav-item" style="font-family: 'fredoka', sans-serif; font-size: 18px">
-                        <a class="nav-link" style="padding-left:0px" href="#" data-toggle="modal" data-target="#Modalpost">Add Post</a>
+                        <a class="nav-link" style="padding-left:0px; padding-right: 0px;" href="#" data-toggle="modal" data-target="#Modalpost">Add Post</a>
                     </li>
                     <li class="nav-item" style="font-family: 'fredoka', sans-serif; font-size: 16px; letter-spacing: 2px">
                         <a href="/profile/{{ auth()->user()->id }}" class="nav-link">
@@ -420,7 +420,7 @@
             @yield('content')
         </main>
 
-        <footer class="footer pt-5 pb-5 text-center">
+        {{-- <footer class="footer pt-5 pb-5 text-center">
             <div class="container">
                 <div class="socials-media">
                     <ul class="list-unstyled">
@@ -438,7 +438,7 @@
                     </span>
                 </p>
             </div>
-        </footer>
+        </footer> --}}
         
         {{-- MODAL ADD ALBUM --}}
         <div class="modal bottom fade" style="overflow-y: scroll;" id="addAlbum" tabindex="-1" role="dialog">
@@ -831,7 +831,7 @@
                                 </div>
                                 
                                 {{-- DIV EDIT --}}
-                                <div id="editForm_{{ $foto->id }}" class="card-body card-body-d" style="overflow-y: auto; width: 100%; padding-top:0; margin-top: 20px;  display: none" >
+                                <div id="editpoto_{{ $foto->id }}" class="card-body card-body-d" style="overflow-y: auto; width: 100%; padding-top:0; margin-top: 20px;  display: none" >
                                     <div style="background-color: white; position: sticky; top: 0; z-index: 999;">
                                         {{-- <h1 class="card-title display-4" style="">{{ $foto->judul_foto }}</h1> --}}
                                         <h1 class="card-title display-4 mb-0 text-dark" style="text-align: center">Edit Your Post!</h1>
@@ -839,7 +839,7 @@
                                             <span class="mb-3 mt-0" style="color: gray; text-align: center; width: 100%; font-weight: 600">Update Your Memories by Editing Your Post</span>
                                         </div>
                                     </div>
-                                    <form id="editForm" method="POST">
+                                    <form id="editForm_{{ $foto->id }}" method="POST" data-photo-id="{{ $foto->id }}">
                                         @csrf
                                         <!-- Tambahkan input atau field lain yang diperlukan untuk edit foto -->
                                         <div class="form-group icon-input mb-3 mt-1" style="position: relative">
@@ -877,7 +877,7 @@
                                         </div>
                                         <div class="col-sm-12 p-0 text-left">
                                             <div class="form-group mb-3">
-                                                <button style="background-color: #101126; border-radius:10px; height: 50px; cursor: pointer;" type="button" onclick="updatePhoto({{ $foto->id }})" class="mb-3 form-control text-center text-white fw-600 border-0 py-2">
+                                                <button style="background-color: #101126; border-radius:10px; height: 50px; cursor: pointer;" type="button" onclick="submitForm({{ $foto->id }})" class="mb-3 form-control text-center text-white fw-600 border-0 py-2">
                                                     <span style="font-weight: 600">Edit</span>
                                                 </button>
                                             </div>
@@ -916,16 +916,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <script>
-        //AJAX EDIT POSTINGAN 
-        function updatePhoto(photoId) {
+        function submitForm(photoId) {
             // Mendapatkan data dari form
-            var formData = $('#editForm').serialize();
-            
+            var formData = new FormData($('#editForm_' + photoId)[0]);
+            formData.append('_token', '{{ csrf_token() }}');
+
             // Mengirim permintaan Ajax
             $.ajax({
-                url: "{{ route('update.photo', '') }}" + "/" + photoId,
+                url: "{{ route('update.photo', '') }}/" + photoId,
                 type: "POST",
                 data: formData,
+                processData: false,  
+                contentType: false,  
                 success: function(response) {
                     console.log(response);
                     toastr.success('Post update successful', 'Success', { 
@@ -942,12 +944,11 @@
                         "closeButton": true, 
                         "toastClass": "toast-green-solid", 
                         "onHidden": function(){
-                            window.location.href = '/pic-pals';
+                            location.reload();
                         }
                     });
                 },
                 error: function(xhr) {
-                    // Tangani error, misalnya tampilkan pesan atau log ke konsol
                     console.log(xhr.responseText);
                     alert('Terjadi kesalahan saat memperbarui foto.');
                 }
@@ -959,13 +960,13 @@
             // Sembunyikan div detail foto
             $('#style-2_' + photoId).hide();
             // Tampilkan form edit foto
-            $('#editForm_' + photoId).show();
+            $('#editpoto_' + photoId).show();
         }
         
         //FUNGSI TOMBOL EDIT FOTO 
         function hideEditForm(photoId) {
             // Sembunyikan form edit foto
-            $('#editForm_' + photoId).hide();
+            $('#editpoto_' + photoId).hide();
             // Tampilkan kembali div detail foto
             $('#style-2_' + photoId).show();
         }

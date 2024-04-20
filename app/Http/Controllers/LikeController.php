@@ -50,7 +50,7 @@ class LikeController extends Controller
         AktivitasUser::create([
             'user_id' => $userId,
             'aktivitas' => $aktivitas,
-            'foto' => $foto->lokasi_file,
+            'foto' => "public/".$foto->lokasi_file,
         ]);
         /////////////////////////////////////////////////////////////
 

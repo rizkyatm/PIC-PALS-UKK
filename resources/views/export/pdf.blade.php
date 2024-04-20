@@ -6,10 +6,10 @@
     <title>Aktivitas User</title>
 </head>
 <body>
-    <h1>Aktivitas User</h1>
+    <h1 style="text-align: center">Laporan Aktivitas {{$user->username}}</h1>
     <table border="1" cellspacing="0" cellpadding="10">
         <thead>
-            <tr>
+            <tr>    
                 <th>No</th>
                 <th>Aktivitas</th>
                 <th>Foto</th>
@@ -18,14 +18,28 @@
         </thead>
         <tbody>
             @foreach ($aktivitas as $index => $data)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $data->aktivitas }}</td>
-                <td>{{ $data->foto }}</td>
-                <td>{{ $data->created_at }}</td>
-            </tr>
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td style="max-width: 335px">{{ $data->aktivitas }}</td>
+                    <td>
+                        @if ($data->foto)
+                            @php
+                                $imagePath = Storage::url($data->foto);
+                                $imageData = base64_encode(file_get_contents(public_path($imagePath)));
+                                $imageSrc = 'data:' . mime_content_type(public_path($imagePath)) . ';base64,' . $imageData;
+                            @endphp
+                            <img style="max-width: 150px; max-height: 400px;" src="{{ $imageSrc }}" alt="Foto">
+                        @else
+                            <p>------</p>
+                        @endif
+                    </td>
+                    <td style="max-width: 250px">{{ $data->created_at->format('d M Y H:i') }}</td>
+                </tr>
             @endforeach
+            
+        
         </tbody>
     </table>
 </body>
 </html>
+

@@ -138,11 +138,16 @@
             <i class="bi bi-arrow-left-short text-dark" style="font-size: 50px"></i>
         </div>
     </a>
-    <a href="/export-pdf" class="m-2" style="position: absolute; right: 50px;">
-        <div style="height: 50px; width: 50px; background-color: white; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; display: flex; justify-content: center; align-items: center; border-radius: 50%">
-            <i class="bi bi-file-earmark-spreadsheet text-dark" style="font-size: 25px"></i>
-        </div>
-    </a>
+    @if(auth()->check() && auth()->user()->id === $user->id)
+        <a href="/export-pdf" class="m-2" style="text-decoration: none; margin-right: 40px; cursor: pointer; position: absolute; right: 50px;top: 95px">
+            <div class="d-flex align-items-center" style="padding: 10px 15px; height: 50px; width: fit-content; background-color: white; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; border-radius: 25px;">
+                <i class="bi bi-file-earmark-spreadsheet text-dark" style="font-size: 20px"></i>
+                <span class="text-dark" style="font-size: 15px; font-weight: 600; margin-left: 5px">
+                    Laporan Aktivitas
+                </span>
+            </div>
+        </a>
+    @endif
     <div class="container mb-4 d-flex flex-column justify-content-center align-items-center mt-4">
             <img src="{{ $user->foto_profile ? asset('storage/'.$user->foto_profile) : asset('assetsUser/img/av.png') }}" class="mb-4 rounded-circle" width="128" height="128" style="object-fit: cover;">
             <h1 class="font-weight-bold title mb-0">{{$user->username}}</h1>

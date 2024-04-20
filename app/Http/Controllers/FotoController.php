@@ -67,7 +67,7 @@ class FotoController extends Controller
         AktivitasUser::create([
             'user_id' => Auth::id(),
             'aktivitas' => $aktivitas,
-            'foto' => str_replace('public/', '', $lokasi_file)
+            'foto' => $lokasi_file
         ]);
     
         // Redirect atau tampilkan respons sesuai kebutuhan aplikasi Anda
@@ -86,7 +86,7 @@ class FotoController extends Controller
                 AktivitasUser::create([
                     'user_id' => Auth::id(),
                     'aktivitas' => $aktivitas,
-                    'foto' => $foto['lokasi_file']
+                    'foto' => "public/".$foto['lokasi_file']
                 ]);
                 
                 $foto->delete();
@@ -150,16 +150,16 @@ class FotoController extends Controller
         $photo->save();
 
         // Simpan informasi foto sebelum diperbarui
-        $fotoSebelumnya = $photo->toArray();
-        // Buat aktivitas pengguna
-        $aktivitas = "Mengupdate foto dengan judul " . $fotoSebelumnya['judul_foto'];
+        // $fotoSebelumnya = $photo->toArray();
+        // // Buat aktivitas pengguna
+        // $aktivitas = "Mengupdate foto dengan judul " . $fotoSebelumnya['judul_foto'];
 
-        // Simpan aktivitas ke tabel aktivitas_user
-        AktivitasUser::create([
-            'user_id' => auth()->id(),
-            'aktivitas' => $aktivitas,
-            'foto' => $fotoSebelumnya['lokasi_file']
-        ]);
+        // // Simpan aktivitas ke tabel aktivitas_user
+        // AktivitasUser::create([
+        //     'user_id' => auth()->id(),
+        //     'aktivitas' => $aktivitas,
+        //     'foto' => "public/" .$fotoSebelumnya['lokasi_file']
+        // ]);
         
 
         // Kirim respons JSON untuk Ajax

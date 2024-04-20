@@ -34,7 +34,7 @@ class KomentarController extends Controller
         AktivitasUser::create([
             'user_id' => auth()->id(),
             'aktivitas' => $aktivitas,
-            'foto' => $ownerFoto
+            'foto' => "public/".$ownerFoto
         ]);
         /////////////////////////////////////////////////////////////////////////////////////////////////////
 
