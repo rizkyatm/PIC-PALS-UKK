@@ -52,6 +52,10 @@
                 width: 5px;
                 background-color: #F5F5F5;
             }
+            .hide-scroll::-webkit-scrollbar
+            {   
+                display: none;
+            }
 
             #style-2::-webkit-scrollbar-thumb
             {
@@ -415,7 +419,6 @@
             });
         </script>
 
-
         <main role="main">
             @yield('content')
         </main>
@@ -757,7 +760,7 @@
                                     </div>
                                 </div>
                                 {{-- DIV DETAIL --}}
-                                <div id="style-2_{{ $foto->id }}" class="card-body card-body-d" style="overflow-y: auto; width: 100%; padding-top:0; margin-top: 20px">
+                                <div id="style-2_{{ $foto->id }}" class="hide-scroll card-body card-body-d" style="overflow-y: auto; width: 100%; padding-top:0; margin-top: 20px">
                                     <div style="background-color: white; position: sticky; top: 0; z-index: 999;">
                                         <h1 class="card-title display-4" style="">{{ $foto->judul_foto }}</h1>
                                         <span>{{ $foto->deskripsi_foto }}</span>

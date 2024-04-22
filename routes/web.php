@@ -3,10 +3,12 @@
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\exportController;
 use App\Http\Controllers\FotoController;
+use App\Http\Controllers\JenislaporanController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\searchController;
+use App\Models\Jenislaporan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +25,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login-admin', function () {  return view('admin.loginTemplate');})->name('TampilanLogin');
 
 Route::get('/Dashboard', function () {  return view('admin.dashboard');});
+Route::get('/jenis-laporan', [JenislaporanController::class, 'index'])->name('jenisLaporan');
+Route::post('/tambah-jenis-laporan', [JenislaporanController::class, 'create'])->name('tambah.jenisLaporan');
+Route::get('/load-jenis-laporan', [JenisLaporanController::class, 'loadJenisLaporan'])->name('load.jenisLaporan');
+Route::post('/delete-jenis-laporan', [JenisLaporanController::class, 'destroy']);
 
 Route::get('/pic-pals', [FotoController::class, 'index'])->name('index.photo');
 

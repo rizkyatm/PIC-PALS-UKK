@@ -60,7 +60,6 @@ class loginController extends Controller
         return back()->withInput()->with('error', 'Email yang anda masukan tidak terdaftar');
     }
 
-
     public function logout(Request $request)
     {   
         //////////////////////////////////////////////////////
