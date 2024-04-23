@@ -67,55 +67,23 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
-
-                        <li class="sidebar-item active">
-                            <a href="index.html" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
-                                <span>Data Master</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item  ">
-                                    <a href="/jenis-laporan" class="submenu-link">Jenis Laporan</a>
-                                </li>
-                                <li class="submenu-item  ">
-                                    <a href="layout-default.html" class="submenu-link">Data Akun</a>
-                                </li>
-                                <li class="submenu-item  ">
-                                    <a href="layout-vertical-1-column.html" class="submenu-link">Data Postingan</a>
-                                </li>
-                                <li class="submenu-item  ">
-                                    <a href="layout-vertical-navbar.html" class="submenu-link">Data Album</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-title">Report</li>
-                        <li class="sidebar-item  ">
-                            <a href="form-layout.html" class='sidebar-link'>
-                                <i class="bi bi-file-earmark-medical-fill"></i>
-                                <span>Report Akun</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item  ">
-                            <a href="form-layout.html" class='sidebar-link'>
+                        <li class="sidebar-item  {{ request()->is('report-postingan') ? 'active' : '' }}">
+                            <a href="/report-postingan" class='sidebar-link'>
                                 <i class="bi bi-file-earmark-medical-fill"></i>
                                 <span>Report Postingan</span>
                             </a>
                         </li>
-                        <li class="sidebar-title">Histori Report</li>
-                        <li class="sidebar-item  ">
-                            <a href="application-email.html" class='sidebar-link'>
-                                <i class="bi bi-clock-history"></i>
-                                <span>H-Report Akun</span>
+                        <li class="sidebar-item {{ request()->is('jenis-laporan') ? 'active' : '' }}">
+                            <a href="/jenis-laporan" class='sidebar-link'>
+                                <i class="bi bi-file-earmark-medical-fill"></i>
+                                <span>Jenis Laporan</span>
                             </a>
-                            <a href="application-email.html" class='sidebar-link'>
+                        </li>
+                        <li class="sidebar-title">Progres Report</li>
+                        <li class="sidebar-item  {{ request()->is('progres-report-postingan') ? 'active' : '' }}">
+                            <a href="/progres-report-postingan" class='sidebar-link'>
                                 <i class="bi bi-clock-history"></i>
-                                <span>H-Report Postingan</span>
+                                <span>Progres Report</span>
                             </a>
                         </li>
                         <li class="sidebar-title">Raise Support</li>

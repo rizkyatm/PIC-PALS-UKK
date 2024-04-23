@@ -84,7 +84,7 @@ class loginController extends Controller
 
             // Tentukan halaman tujuan berdasarkan peran pengguna
             if ($userRole === 'admin') {
-                $redirectPath = '/login-admin';
+                $redirectPath = '/pic-pals';
             } else {
                 $redirectPath = '/pic-pals';
             }

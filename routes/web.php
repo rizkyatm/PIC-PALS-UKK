@@ -7,6 +7,7 @@ use App\Http\Controllers\JenislaporanController;
 use App\Http\Controllers\KomentarController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\ReportFotoController;
 use App\Http\Controllers\searchController;
 use App\Models\Jenislaporan;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,13 @@ Route::get('/jenis-laporan', [JenislaporanController::class, 'index'])->name('je
 Route::post('/tambah-jenis-laporan', [JenislaporanController::class, 'create'])->name('tambah.jenisLaporan');
 Route::get('/load-jenis-laporan', [JenisLaporanController::class, 'loadJenisLaporan'])->name('load.jenisLaporan');
 Route::post('/delete-jenis-laporan', [JenisLaporanController::class, 'destroy']);
+
+Route::post('/report-foto', [ReportFotoController::class, 'reportFoto'])->name('report-foto');
+Route::get('/report-postingan', [ReportFotoController::class, 'index'])->name('report');
+Route::get('/progres-report-postingan', [ReportFotoController::class, 'indexx'])->name('report');
+
+Route::post('/laporan-valid/{id}', [ReportFotoController::class, 'updateStatusValid'])->name('laporan.valid');
+Route::post('/laporan-tidak-valid/{id}', [ReportFotoController::class, 'updateStatusTidakValid'])->name('laporan.tidak.valid');
 
 Route::get('/pic-pals', [FotoController::class, 'index'])->name('index.photo');
 

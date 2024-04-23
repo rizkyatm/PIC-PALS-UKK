@@ -39,6 +39,48 @@
         @yield('style')
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito+Sans:opsz,wght@6..12,200;6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900;6..12,1000&display=swap');
+            .radio-label {
+                display: flex;
+                cursor: pointer;
+                font-weight: 500;
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 0.375em;
+            }
+
+            .radio-label input {
+                position: absolute;
+                left: -9999px;
+            }
+
+            .radio-label input:checked + .radio-span {
+                background-color: #c6c6c6;
+            }
+
+            .radio-span {
+                display: flex;
+                align-items: center;
+                padding: 0.375em 0.75em 0.375em 0.375em;
+                border-radius: 99em; 
+                transition: 0.25s ease;
+            }
+
+            .radio-span:hover {
+                background-color: #c6c6c6;
+            }
+
+            .radio-span:before {
+                display: flex;
+                flex-shrink: 0;
+                content: "";
+                background-color: #fff;
+                width: 1.5em;
+                height: 1.5em;
+                border-radius: 50%;
+                margin-right: 0.375em;
+                transition: 0.25s ease;
+                box-shadow: inset 0 0 0 0.125em #00005c;
+            }
             #style-2::-webkit-scrollbar-track
             {   
                 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
@@ -444,7 +486,7 @@
         </footer> --}}
         
         {{-- MODAL ADD ALBUM --}}
-        <div class="modal bottom fade" style="overflow-y: scroll;" id="addAlbum" tabindex="-1" role="dialog">
+        <div class="modal bottom fade" style="overflow-y: scroll;" id="addAlbum" >
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content border-0" style="border-radius: 8px;">
                     <div class="modal-body p-3 d-flex align-items-center bg-none">
@@ -483,7 +525,7 @@
         </div>
 
         {{-- MODAL POST --}}
-        <div class="modal bottom fade" style="overflow-y: scroll;" id="Modalpost" tabindex="-1" role="dialog">
+        <div class="modal bottom fade" style="overflow-y: scroll;" id="Modalpost" >
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content border-0" style="border-radius: 8px;">
                     <div class="modal-body p-3 d-flex align-items-center bg-none">
@@ -572,7 +614,7 @@
         </div>
     
         {{-- MODAL LOGIN --}}
-        <div class="modal bottom fade" style="overflow-y: scroll;" id="Modallogin" tabindex="-1" role="dialog">
+        <div class="modal bottom fade" style="overflow-y: scroll;" id="Modallogin" >
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content border-0" style="border-radius: 8px;">
                     <div class="modal-body p-3 d-flex align-items-center bg-none">
@@ -619,7 +661,7 @@
     
         @if(auth()->check() && auth()->id() === $user->id)
             {{-- MODAL EDIT PROFILE --}}
-            <div class="modal bottom fade" style="overflow-y: scroll;" id="editProfile" tabindex="-1" role="dialog">
+            <div class="modal bottom fade" style="overflow-y: scroll;" id="editProfile" >
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content border-0" style="border-radius: 8px;">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti-close text-grey-500"></i></button>
@@ -682,7 +724,7 @@
             </div>
         @else
             {{-- MODAL REGISTER --}}
-            <div class="modal bottom fade" style="overflow-y: scroll;" id="ModalRegister" tabindex="-1" role="dialog">
+            <div class="modal bottom fade" style="overflow-y: scroll;" id="ModalRegister" >
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content border-0" style="border-radius: 8px;">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ti-close text-grey-500"></i></button>
@@ -745,8 +787,63 @@
 
         @if(isset($fotos) && $fotos)
             @foreach ($fotos as $foto)
+                <div class="modal bottom fade" style="style-2 overflow-y: scroll; z-index: 9999; background-color: #dededeaf" id="ModalReport{{ $foto->id }}" >
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content border-0" style="border-radius: 8px;box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;">
+                            <div class="modal-body p-3 d-flex align-items-center bg-none">
+                                <div class="btn btn-light" style="position: absolute; top: 10px; right: 0; z-index: 999; background-color: transparent; border: none" data-dismiss="modal">
+                                    <span class="bi bi-x-lg text-dark" style="font-size: 20px"></span> <!-- Ganti dengan icon sesuai kebutuhan -->
+                                </div>
+                                <div class="card shadow-none rounded-0 w-100 p-2 pt-3 border-0">
+                                    <div class="rounded-0 text-left">
+                                        <h1 class="card-title display-4 mb-0 text-dark" style="text-align: center">Report Posts Now!</h1>
+                                        <div style="display: flex; justify-content: center; align-items: center;">
+                                            <span class="mb-4 mt-0" style="color: gray; text-align: center; width: 100%; font-weight: 600">Help Us Maintain a Safe Community</span>
+                                        </div>
+                                        <form  action="/report-foto" method="POST"  style="padding-left: 40px; padding-right: 40px">
+                                            @csrf
+                                            <input type="hidden" id="foto_id" name="foto_id" value="{{ $foto->id }}">
+                                            @if(auth()->check())
+                                                <input type="hidden" id="pelapor_id" name="pelapor_id" value="{{ auth()->user()->id }}">
+                                            @endif
+
+                                            <div style="max-height: 450px; overflow-y: scroll;" id="style-2">
+                                                @if(isset($jenisPelanggaran))
+                                                    @foreach ($jenisPelanggaran as $pelanggaran)      
+                                                        <label class="radio-label">
+                                                            <input type="radio" name="radio" value="{{$pelanggaran->id}}" onclick="hideInput({{ $foto->id }})">
+                                                            <span class="radio-span">{{$pelanggaran->jenis_laporan}}</span>
+                                                        </label>
+                                                    @endforeach
+                                                @endif
+                                                <label class="radio-label">
+                                                    <input type="radio" name="radio" onclick="showInput({{ $foto->id }})">
+                                                    <span class="radio-span">Lainnya</span>
+                                                </label>
+                                                
+                                                <div id="lainnyaInput{{$foto->id}}" class="form-group icon-input mb-3" style="position: relative; display: none;">
+                                                    <i class="bi bi-file-text" style="position: absolute; top: 70%; transform: translateY(-50%); left: 10px; font-size: 1.5em; color: #b3b3b3"></i>
+                                                    <input id="jenisLaporanInput" type="text" name="jenis_laporan_baru" class="input-1 ps-5 font-xsss fw-600 pl-5" required>
+                                                    <label placeholder="Report" alt="Report"></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 p-0 text-left">
+                                                <div class="form-group mb-3 mt-2">
+                                                    <button style="background-color: #101126; border-radius:10px; height: 50px; cursor: pointer;" id="submitReportButton{{$foto->id}}" onclick="submitReport({{ $foto->id }})" class="form-control text-center text-white fw-600 border-0 py-2">
+                                                        <span style="font-weight: 600">Report</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- MODAL DETAIL GAMBAR -->
-                <div class="modal bottom fade" style="overflow-y: scroll; padding-right:0 " id="imageModal_{{ $foto->id }}" tabindex="-1" role="dialog">
+                <div class="modal bottom fade" style="overflow-y: scroll; padding-right:0 " id="imageModal_{{ $foto->id }}" >
                     <div class="modal-dialog modal-lg d-flex justify-content-center align-items-center"  id="dialog_modal" role="document">
                         <div class="modal-content" style="border-radius: 15px;">
                             <div class="container-detail-post">
@@ -797,6 +894,11 @@
                                                     <span class="bi bi-download"></span> Download
                                                 </button>
                                             </a>  
+                                            @if (auth()->check() && $foto->user_id !== Auth::id())
+                                            <button type="button" data-toggle="modal" data-target="#ModalReport{{ $foto->id }}" class="btn btn-gray200 tombol-1" style="background-color: #6997BF; color: white;">
+                                                <span class="file-earmark-medical-fill"></span> Report
+                                            </button>
+                                            @endif
                                             @if($foto->user->id == auth()->id())
                                                 <button type="button" class="btn btn-gray200 tombol-1"  onclick="showEditForm({{ $foto->id }});" style="background-color: #243D6A;color: white;">
                                                     <span class="bi bi-pencil-square"></span>  Edit
@@ -917,8 +1019,71 @@
     <script src="{{ asset('assets/extensions/toastify-js/src/toastify.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/filepond.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
     <script>
+        function showInput(fotoId) {
+            var lainnyaInput = document.getElementById("lainnyaInput" + fotoId);
+            lainnyaInput.style.display = "block";
+        }
+    
+        function hideInput(fotoId) {
+            var lainnyaInput = document.getElementById("lainnyaInput" + fotoId);
+            lainnyaInput.style.display = "none";
+            var jenisLaporanInput = document.getElementById("jenisLaporanInput" + fotoId);
+            jenisLaporanInput.value = ""; 
+        }
+    </script>
+    <script>
+        
+        function submitReport(fotoId) {
+            var jenisLaporanId = null;
+            var pelaporId = document.getElementById("pelapor_id").value;
+        
+            // Cek apakah radio button jenis laporan baru dipilih
+            if (document.querySelector('input[name="jenis_laporan_baru"]:checked')) {
+                jenisLaporanId = document.getElementById("jenisLaporanInput").value;
+            } else {
+                jenisLaporanId = document.querySelector('input[name="radio"]:checked').value;
+            }
+        
+            // Kirim data menggunakan Ajax
+            $.ajax({
+                type: "POST",
+                url: "/report-foto",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    foto_id: fotoId,
+                    jenis_laporan_id: jenisLaporanId,
+                    pelapor_id: pelaporId
+                },
+                success: function(response) {
+                    console.log(response); 
+                    toastr.success('Post successfully reported', 'Success', { 
+                        "progressBar": true, 
+                        "positionClass": "toast-top-right", 
+                        "showDuration": "300", 
+                        "hideDuration": "1000", 
+                        "timeOut": "1500", 
+                        "extendedTimeOut": "1000", 
+                        "showEasing": "swing", 
+                        "hideEasing": "linear", 
+                        "showMethod": "fadeIn", 
+                        "hideMethod": "fadeOut", 
+                        "closeButton": true, 
+                        "toastClass": "toast-green-solid", 
+                        "onHidden": function(){
+                            $('#ModalReport'+pelaporId).modal('hide'); 
+                        }
+                    });
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText); // Tampilkan pesan kesalahan di konsol (opsional)
+                    alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi."); // Tampilkan pesan kesalahan kepada pengguna
+                }
+            });
+        }
+
+        //edit postingan
         function submitForm(photoId) {
             // Mendapatkan data dari form
             var formData = new FormData($('#editForm_' + photoId)[0]);
@@ -1356,7 +1521,7 @@
                 timer: 1000 // Tampilkan pesan sukses selama 2 detik
             }).then(() => {
                 @if(Auth::user()->role === 'admin')
-                    window.location.href = '/Dashboard';
+                    window.location.href = '/pic-pals';
                 @elseif(request()->path() !== 'pic-pals')
                     window.location.href = '/pic-pals';
                 @endif

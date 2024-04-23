@@ -51,9 +51,20 @@ class User extends Authenticatable
         return $this->hasMany(Komentar::class);
     }
 
+    public function aktivitas_user()
+    {
+        return $this->hasMany(AktivitasUser::class);
+    }
+
     public function likes()
     {
         return $this->belongsToMany(Foto::class, 'likes', 'user_id', 'foto_id');
     }
+
+    public function reportFotos()
+    {
+        return $this->belongsToMany(ReportFoto::class, 'report_foto', 'pelapor_id', 'report_foto_id');
+    }
+
 }
 

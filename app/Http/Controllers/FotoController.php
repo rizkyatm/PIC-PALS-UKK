@@ -6,6 +6,7 @@ use App\Models\AktivitasUser;
 use App\Models\Album;
 use App\Models\Category;
 use App\Models\Foto;
+use App\Models\Jenislaporan;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,12 +20,13 @@ class FotoController extends Controller
         $user = User::find($userId);
         $categorys = Category::cursor();
         $albums = Album::where('user_id', $userId)->latest()->get();
+        $jenisPelanggaran = Jenislaporan::all();
 
         $fotoTerbaru = Foto::with('album','category')->latest()->first();
         $fotosTanpaTerbaru = Foto::with('album','category')->where('id', '!=', optional($fotoTerbaru)->id)->get();
         $fotos = collect([$fotoTerbaru])->merge($fotosTanpaTerbaru->shuffle());        
 
-        return view('user.index', compact('fotos','albums','user','categorys'));
+        return view('user.index', compact('fotos','albums','user','categorys','jenisPelanggaran'));
     }
 
     public function storeFoto(Request $request)

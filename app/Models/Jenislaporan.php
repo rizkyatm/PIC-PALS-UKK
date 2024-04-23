@@ -11,4 +11,11 @@ class Jenislaporan extends Model
 
     protected $table = 'jenislaporans';
     protected $guarded = [];
+
+    
+    public function reportFotos()
+    {
+        return $this->belongsToMany(ReportFoto::class, 'report_foto', 'jenis_laporan_id', 'report_foto_id');
+    }
+
 }

@@ -36,4 +36,9 @@ class Foto extends Model
     {
         return $this->belongsToMany(Like::class, 'likes', 'foto_id', 'user_id');
     }
+
+    public function reportFotos()
+    {
+        return $this->hasMany(ReportFoto::class, 'report_foto', 'foto_id');
+    }
 }
