@@ -13,7 +13,12 @@ class AlbumController extends Controller
     public function getAlbum($id)
     {   
         $user = User::find($id);
-        $albums = Album::where('user_id', $id)->latest()->get();
+        $albums = Album::with(['fotos' => function($query) {
+            $query->latest()->take(1); 
+        }])
+        ->where('user_id', $id)
+        ->latest()
+        ->get();
         $categorys = Category::all();
         return view('user.album', compact('albums', 'user', 'categorys'));
     }

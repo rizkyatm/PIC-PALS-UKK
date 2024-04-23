@@ -32,118 +32,110 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <table class="table table-striped" id="table1">
+                    <table class="table datatable ">
                         <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Foto</th>
-                                <th>Username</th>
-                                <th>Judul Foto</th>
-                                <th>Laporan</th>
-                                <th>Jenis Laporan</th>
-                                <th>Detail foto</th>
-                                <th>Action</th>
-                            </tr>
+                          <tr>
+                            <th>
+                              <b>No</b>
+                            </th>
+                            <th style="width: 130px;">
+                              Postingan
+                            </th>
+                            <th>Pemosting</th>
+                            <th style="width: 150px;">Deskripsi</th>
+                            <th>Jumlah Laporan</th>
+                            <th>Status</th>
+                            <th data-type="date" data-format="MM/DD/YYYY" style="width: 120px;">Tanggal</th>
+                            <th style="width: 10px;">Aksi</th>
                         </thead>
                         <tbody>
-                            @foreach ($reports as $report)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        @if($report->fotos)
-                                            <img style="max-width: 50px" src="{{ asset('storage/'.$report->fotos->lokasi_file) }}" alt="">
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($report->fotos && $report->fotos->user)
-                                            {{$report->fotos->user->username}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($report->fotos)
-                                            {{$report->fotos->judul_foto}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($report->pelapors)
-                                            {{$report->pelapors->username}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($report->jenisLaporans)
-                                            {{$report->jenisLaporans->jenis_laporan}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($report->fotos)
-                                            <a data-bs-toggle="modal" data-bs-target="#detailmodal{{$report->fotos->id}}" href=""><span class="badge bg-warning">Detail</span></a>
-                                        @endif
-                                    </td>
-                                    <td style="width: 250px">
-                                        <form action="{{ route('laporan.valid', $report->id) }}" method="POST">
-                                            @csrf
-                                            @method('POST')
-                                            <button style="width: 165px" type="submit" class="mb-1 btn btn-success">Laporan  Valid</button>
-                                        </form>
-                                        <form action="{{ route('laporan.tidak.valid', $report->id) }}" method="POST">
-                                            @csrf
-                                            @method('POST')
-                                            <button style="300px" type="submit" class="btn btn-danger">Laporan tidak Valid</button>
-                                        </form>         
-                                    </td>
-                                </tr>
+                          @php $number = 1 @endphp
+                          @foreach($groupedReports as $foto_id => $reports)
+                          <tr>
+                            <td>{{ $number++ }}</td>
+                            <td>
+                              <img src="{{ asset('storage/'.$reports->first()->fotos->lokasi_file) }}" alt="{{ $reports->first()->fotos->judul_foto }}" style="width: 80px;">
+                            </td>
+                            <td>{{ $reports->first()->fotos->user->username }}</td>
+                            <td>{{ $reports->first()->fotos->deskripsi_foto }}</td>
+                            <td>
+                                 <div>Terdapat {{ count($reports->pluck('jenisLaporans')->unique()) }} Laporan</div>
+                            </td>
+                            <td>
+                                <ul class="p-1 m-0" style="list-style-type: none;">
+                                    @if($reports->isNotEmpty())
+                                        <li>
+                                            <div class="badge text-bg-danger">{{ $reports->first()->status }}</div>
+                                        </li>
+                                    @endif
+                                </ul>                                
+                            </td>
+                            <td>
+                              {{-- @foreach($reports as $report) --}}
+                              <div>{{ $reports->first()->fotos->created_at->format('d/m/Y') }}</div>
+                              {{-- @endforeach --}}
+                            </td>
+                            <td>
+                                <div style="display: flex; ">
 
-                                <div class="modal fade" id="detailmodal{{ optional($report->fotos)->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalCenterTitle">Detail Postingan</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <i data-feather="x"></i>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                @if($report->fotos)
-                                                    <div class="d-flex justify-content-center align-items-center">
-                                                        <img style="max-width: 300px; align-items: center" src="{{ asset('storage/'. optional($report->fotos)->lokasi_file) }}" alt="">
-                                                    </div>
-                                                    <h1 class="text-center mt-2">
-                                                        {{ optional($report->fotos)->judul_foto }}
-                                                    </h1>
-                                                    <p>
-                                                        {{ optional($report->fotos)->deskripsi_foto }}
-                                                    </p>
-                                                @endif
-                                            </div>  
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                                    <i class="bx bx-x d-block d-sm-none"></i>
-                                                    <span class="d-none d-sm-block">Close</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <button class="btn btn-warning-1"  data-bs-toggle="modal"  data-bs-target="#modalDetail{{ $reports->first()->fotos->user->id }}"><i class="bi bi-eye"></i></button> 
+                                      @if(count($reports->pluck('jenisLaporans')->unique()) > 0)
+                                      <form action="{{ route('hapus.foto.report', ['id' => $reports->first()->fotos->id]) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger-1"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                      @endif
                                 </div>
-                                
-                            @endforeach
-                            {{-- <tr>
-                                <td>1</td>
-                                <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                <td>19-02-2025</td>
-                                <td>19-02-2025</td>
-                                <td>
-                                    <a href=""><span class="badge bg-danger">Delete</span></a>
-                                </td>
-                            </tr> --}}
+                            </td>
+                          </tr>
+                          @endforeach
                         </tbody>
                     </table>
+                    @if($reports->isNotEmpty())
+                    <div class="modal fade" id="modalDetail{{ $reports->first()->fotos->user->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
+                            role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Detail Laporan
+                                    </h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        <i data-feather="x"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Pelapor</th>
+                                                <th>Jenis Laporan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($reports as $report)
+                                            <tr>
+                                                <td>{{ $report->pelapors->username }}</td>
+                                                <td>{{ $report->jenisLaporans->jenis_laporan }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>                                      
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary"
+                                        data-bs-dismiss="modal">
+                                        <i class="bx bx-x d-block d-sm-none"></i>
+                                        <span class="d-none d-sm-block">Close</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
         </section>
     </div>
-
-
-    
-    
 @endsection

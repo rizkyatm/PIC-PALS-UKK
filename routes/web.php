@@ -35,7 +35,8 @@ Route::post('/report-foto', [ReportFotoController::class, 'reportFoto'])->name('
 Route::get('/report-postingan', [ReportFotoController::class, 'index'])->name('report');
 Route::get('/progres-report-postingan', [ReportFotoController::class, 'indexx'])->name('report');
 
-Route::post('/laporan-valid/{id}', [ReportFotoController::class, 'updateStatusValid'])->name('laporan.valid');
+Route::post('/hapus-foto-report/{id}', [ReportFotoController::class, 'deleteFoto'])->name('hapus.foto.report');
+
 Route::post('/laporan-tidak-valid/{id}', [ReportFotoController::class, 'updateStatusTidakValid'])->name('laporan.tidak.valid');
 
 Route::get('/pic-pals', [FotoController::class, 'index'])->name('index.photo');

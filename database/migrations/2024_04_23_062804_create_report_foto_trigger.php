@@ -19,13 +19,13 @@ class CreateReportFotoTrigger extends Migration
             BEGIN
                 DECLARE foto_count INT;
                 DECLARE delete_count INT;
-
+            
                 -- Hitung jumlah entri dalam report_foto dengan foto_id yang sama dengan yang baru saja dimasukkan
                 SELECT COUNT(*) INTO foto_count FROM report_foto WHERE foto_id = NEW.foto_id AND status = "Laporan valid";
-
+            
                 -- Tentukan berapa banyak entri yang akan dihapus
                 SET delete_count = foto_count - 10;
-
+            
                 -- Jika jumlah entri foto_id sama dengan 10 atau lebih
                 IF delete_count >= 0 THEN
                     -- Hapus entri-entri tertua dari tabel foto dengan foto_id yang sama dengan soft delete
@@ -42,8 +42,11 @@ class CreateReportFotoTrigger extends Migration
                             LIMIT delete_count
                         ) AS old_fotos
                     );
+                    
+                    -- Hapus entri-entri dari tabel report_foto dengan foto_id yang sama
+                    DELETE FROM report_foto WHERE foto_id = NEW.foto_id AND user_id = NEW.user_id;
                 END IF;
-            END
+            END;
         ');
     }
 

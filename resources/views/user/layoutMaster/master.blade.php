@@ -36,6 +36,11 @@
     
         <!-- Toastr CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+        <link 
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" 
+        rel="stylesheet"
+       />
         @yield('style')
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Nunito+Sans:opsz,wght@6..12,200;6..12,300;6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900;6..12,1000&display=swap');
@@ -170,7 +175,6 @@
             }
         </style>
     </head>
-    
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -859,7 +863,19 @@
                                 {{-- DIV DETAIL --}}
                                 <div id="style-2_{{ $foto->id }}" class="hide-scroll card-body card-body-d" style="overflow-y: auto; width: 100%; padding-top:0; margin-top: 20px">
                                     <div style="background-color: white; position: sticky; top: 0; z-index: 999;">
-                                        <h1 class="card-title display-4" style="">{{ $foto->judul_foto }}</h1>
+                                        <div style="display: flex">
+                                            <h1 class="card-title display-4" style="">{{ $foto->judul_foto }}</h1>
+                                            <div class="dropdown">
+                                                <span id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </span>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                                                    <a class="dropdown-item" href="{{ asset('storage/' . $foto->lokasi_file) }}" download>Download</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <span>{{ $foto->deskripsi_foto }}</span>
                                         <hr style="border: transparent">
                                         <div class="d-flex mb-3" style="justify-content: space-between">
@@ -868,22 +884,17 @@
                                                     <img src="{{ $foto->user->foto_profile ? asset('storage/' . $foto->user->foto_profile) : asset('assetsUser/img/av.png') }}" alt="" class="img-circle" style="border-radius: 40px; width: 40px; height: 40px; object-fit: cover;">
                                                     <div style="margin-left: 10px">
                                                         <div class="mb-0" style="font-size: 15px; font-weight: 600">{{$foto->user->username}}</div>
-                                                        <div  style="font-size: 12px">{{ $foto->user->fotos->count() }} Post</div>
+                                                        <div  style="font-size: 12px">
+                                                            @if(\Carbon\Carbon::parse($foto->created_at)->diffInDays() > 7)
+                                                                {{ \Carbon\Carbon::parse($foto->created_at)->format('j F Y') }}
+                                                            @else
+                                                                {{ \Carbon\Carbon::parse($foto->created_at)->diffForHumans()}}
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-gray200 tombol2" style="background-color: #3370A6; color: white;">
-                                            <span class="bi bi-calendar-week"></span>                                                            
-                                            @if(\Carbon\Carbon::parse($foto->created_at)->diffInDays() > 7)
-                                                {{ \Carbon\Carbon::parse($foto->created_at)->format('j F Y') }}
-                                            @else
-                                                {{ \Carbon\Carbon::parse($foto->created_at)->diffForHumans()}}
-                                            @endif
-                                        </button>
-                                        <a href="{{ $foto->album_id ? route('foto.album', ['id' => $foto->album_id]) : '#' }}" type="button" class="btn btn-gray200 tombol2" style="background-color: #3370A6; color: white;">
-                                            <span class="bi bi-journal-album"></span>  {{$foto->album_id ? $foto->album->nama_album : 'Doesnt have an album'}}
-                                        </a>
                                         <div>
                                             <button type="button" class="btn btn-like btn-gray200 tombol-1" style="background-color: #445985;color: white" id="likeButton_{{ $foto->id }}" data-photoid="{{ $foto->id }}">
                                                 <span class="bi bi-suit-heart"></span> 
@@ -1005,6 +1016,7 @@
         @endif
     
     </body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="{{ asset('assetsUser/js/app.js') }}"></script>
     <script src="{{ asset('assetsUser/js/theme.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -1521,7 +1533,7 @@
                 timer: 1000 // Tampilkan pesan sukses selama 2 detik
             }).then(() => {
                 @if(Auth::user()->role === 'admin')
-                    window.location.href = '/pic-pals';
+                    window.location.href = '/report-postingan';
                 @elseif(request()->path() !== 'pic-pals')
                     window.location.href = '/pic-pals';
                 @endif

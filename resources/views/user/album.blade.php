@@ -169,7 +169,7 @@
                 @foreach ($albums as $album)       
                     <div class="gambar-utama card card-pin">
                         <a href="{{ route('foto.album', ['id' => $album->id]) }}">
-                            <img class="card-img" style="border-radius: 15px;" src="https://1.bp.blogspot.com/-1c4feMWtBew/YVEl9kpt6XI/AAAAAAAAEuM/6owYtkcDNxY9JH3Wco8SBqSNDM-ek9UYwCLcBGAsYHQ/s16000/icon-app-soft-blue-enhypen%2B%25281%2529.jpg" alt="Card image">
+                            <img class="card-img" style="border-radius: 15px;" src="{{ $album->fotos->first() ? asset('storage/'.$album->fotos->first()->lokasi_file) : 'https://1.bp.blogspot.com/-1c4feMWtBew/YVEl9kpt6XI/AAAAAAAAEuM/6owYtkcDNxY9JH3Wco8SBqSNDM-ek9UYwCLcBGAsYHQ/s16000/icon-app-soft-blue-enhypen%2B%25281%2529.jpg' }}" alt="Card image">
                         </a>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <a class="nav-link text-dark" style="padding-left: 5px">

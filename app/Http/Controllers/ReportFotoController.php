@@ -46,12 +46,6 @@ class ReportFotoController extends Controller
         return response()->json($response);
     }
 
-    public function index(){
-        $reports = ReportFoto::with('fotos', 'pelapors', 'jenisLaporans')
-        ->where('status', 'pending')
-        ->get();
-        return view('admin.reportUser', compact('reports'));
-    }
     public function indexx(){
         $reports = ReportFoto::with('fotos', 'pelapors', 'jenisLaporans')
         ->Where('status', 'Laporan Tidak valid')
@@ -60,47 +54,31 @@ class ReportFotoController extends Controller
         return view('admin.history', compact('reports'));
     }
 
-
-    public function updateStatusValid($id)
+    public function index()
     {
-        // Cari laporan berdasarkan ID
-        $report = ReportFoto::findOrFail($id);
+        $reports = ReportFoto::all();
     
-        // Ubah status menjadi 'Laporan valid'
-        $report->update(['status' => 'Laporan valid']);
+        // Kelompokkan berdasarkan foto_id
+        $groupedReports = $reports->groupBy('foto_id');
     
-        // Periksa apakah ada lebih dari 10 entri dengan foto_id yang sama dan status 'Laporan valid'
-        $fotoCount = ReportFoto::where('foto_id', $report->foto_id)
-                                ->where('status', 'Laporan valid')
-                                ->count();
-    
-        // Jika jumlah entri lebih dari 10, hapus salah satu foto dengan foto_id yang sama
-        if ($fotoCount > 10) {
-            $fotoToDelete = Foto::find($report->foto_id);
-            if ($fotoToDelete) {
-                $fotoToDelete->delete();
-            }
-            
-            // Hapus semua entri di tabel report_foto dengan foto_id yang sama
-            ReportFoto::where('foto_id', $report->foto_id)->delete();
-        }
-    
-        // Redirect kembali ke halaman sebelumnya atau ke halaman tertentu
-        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui.');
+        return view('admin.reportUser', compact('groupedReports', 'reports'));
     }
-    
-    
 
-    public function updateStatusTidakValid($id)
+    public function deleteFoto($id)
     {
-        // Cari laporan berdasarkan ID
-        $report = ReportFoto::findOrFail($id);
+        // Temukan foto berdasarkan ID
+        $foto = Foto::findOrFail($id);
         
-        // Ubah status menjadi 'Laporan valid'
-        $report->update(['status' => 'Laporan Tidak valid']);
+        // Hapus foto
+        $foto->delete();
 
-        // Redirect kembali ke halaman sebelumnya atau ke halaman tertentu
-        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui.');
+        // Hapus entri di report_foto dengan foto_id tertentu
+        ReportFoto::where('foto_id', $id)->delete();
+
+        // Redirect atau berikan respon sesuai kebutuhan
+        return redirect()->back()->with('success', 'Foto dan entri di report_foto berhasil dihapus.');
     }
+    
+
     
 }

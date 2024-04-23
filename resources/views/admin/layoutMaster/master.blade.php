@@ -79,13 +79,13 @@
                                 <span>Jenis Laporan</span>
                             </a>
                         </li>
-                        <li class="sidebar-title">Progres Report</li>
+                        {{-- <li class="sidebar-title">Progres Report</li>
                         <li class="sidebar-item  {{ request()->is('progres-report-postingan') ? 'active' : '' }}">
                             <a href="/progres-report-postingan" class='sidebar-link'>
                                 <i class="bi bi-clock-history"></i>
                                 <span>Progres Report</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-title">Raise Support</li>
                         <li class="sidebar-item  ">
                             <a href="/logout" class='sidebar-link'>
